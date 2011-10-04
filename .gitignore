@@ -1,0 +1,18 @@
+# standard
+*~
+*.pyc
+*.pyo
+*.mo
+*.log
+*.pid
+/*.egg-info
+/.coverage
+
+# local
+/local.cfg
+/local.ini
+
+# app
+/data/*
+
+cstyle.css
