@@ -3,7 +3,8 @@
 <%block name="content_inner">
     <div class="grid_11 alpha">
         <div id="stream">
-            <form id="stream-form" action="" method="post">
+            <form id="stream-form" action="${url('post_status')}" method="post">
+                <input type="hidden" name="_csrf" value="${session.get_csrf_token()}" />
                 <div class="form-field">
                     <textarea name="status" rows="3" cols="60"></textarea>
                 </div>

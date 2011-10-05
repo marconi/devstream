@@ -6,7 +6,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-requires = ['pyramid', 'WebError']
+requires = ['pyramid', 'WebError', 'formencode', 'mongoengine',
+            'gevent-websocket==0.2.3', 'gevent-socketio==0.2.1',
+            'pyramid-socketio==0.6']
 
 setup(name='devstream',
       version='0.0',

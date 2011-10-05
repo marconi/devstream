@@ -278,6 +278,20 @@ header h1 a {
 .latest-status-item .status-info .status .time {
     color: #99173C;
 }
+.error {
+    color: #DB1C1C;
+}
+.message {
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 0;
+}
+.message.info {
+    color: #91BD09;
+}
+.message.warning {
+    color: #DB1C1C;
+}
 
 /* jquery placeholder */
 label.placeholder {

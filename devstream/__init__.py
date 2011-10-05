@@ -11,7 +11,6 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     config = Configurator(root_factory=Root, settings=settings)
-    config.add_static_view('static', 'devstream:static')
 
     # init beaker session
     session_factory = session_factory_from_settings(settings)
@@ -21,6 +20,11 @@ def main(global_config, **settings):
     connect(settings.get('mongodb.db', 'test'),
             host=settings.get('mongodb.host', 'localhost'),
             port=int(settings.get('mongodb.port', 27017)))
+
+    # static views
+    config.add_static_view('static', 'devstream:static')
+    config.add_static_view('socket.io/lib',
+                           'devstream:static/js/libs/socketio/lib')
 
     # includes
     config.include('devstream.views.add_routes')

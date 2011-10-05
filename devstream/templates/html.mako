@@ -20,7 +20,11 @@
     <link rel="stylesheet" href="${h.assets_url(request, '/css/960/text.css')}" type="text/css" />
     <link rel="stylesheet" href="${h.assets_url(request, '/css/960/960.css')}" type="text/css" />
     <link rel="stylesheet" href="${h.assets_url(request, '/css/style.css')}" type="text/css" />
+
     <script src="${h.assets_url(request, '/js/libs/modernizr-1.7.min.js')}"></script>
+    <script src="${request.static_url('devstream:static/js/libs/socketio/socket.io.js')}"></script>
+
+    <%block name="head"></%block>
 
 </head>
 
