@@ -21,12 +21,12 @@ $(document).ready(function() {
     /**
      * Connect to SocketIO
      */
-    socket = new io.Socket('localhost', {
-        transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart',
-                     'xhr-polling', 'jsonp-polling']});
+    socket = new io.Socket('localhost', {transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling']});
 
     socket.on('connect', function() {
-        // socket.send({type: 'connect', userid: 123});
+        var newDate = new Date;
+        var random_uid = newDate.getTime();
+        socket.send({type: 'connect', uid: random_uid});
     });
 
     socket.on('message', function(obj) {

@@ -2,6 +2,8 @@
 
 import json
 import logging
+import redis
+from json import loads, dumps
 
 from pyramid.view import view_config
 from pyramid.i18n import TranslationString as _
@@ -34,6 +36,9 @@ def do_post_status(request):
         status.save()
         response['message'] = _("Status successfully posted")
 
-        # TODO: publish to redis channel the new status
+        # publish status to channel
+        rdis = redis.Redis()
+        msg = {'type': 'status', 'content': status.status}
+        rdis.publish('devstream', dumps(msg))
 
         return HTTPOk(body=json.dumps(response))
