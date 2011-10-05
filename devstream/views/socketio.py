@@ -8,8 +8,7 @@ from pyramid_socketio.io import SocketIOContext, socketio_manage
 
 class ConnectIOContext(SocketIOContext):
     def msg_connect(self, msg):
-        print "Connect message received", msg
-        self.msg("connected", hello="world")
+        pass
 
 
 @view_config(route_name="socket_io")

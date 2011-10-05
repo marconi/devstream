@@ -18,6 +18,32 @@ $(document).ready(function() {
         return field;
     }
 
+    /**
+     * Connect to SocketIO
+     */
+    socket = new io.Socket('localhost', {
+        transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart',
+                     'xhr-polling', 'jsonp-polling']});
+
+    socket.on('connect', function() {
+        // socket.send({type: 'connect', userid: 123});
+    });
+
+    socket.on('message', function(obj) {
+        console.log(obj);
+    });
+
+    socket.on('error', function(obj) {
+        console.log(obj);
+    });
+
+    socket.on('disconnect', function() {
+        console.log('Disconnected');
+    });
+
+    socket.connect();
+
+
     $("#stream-form .form-submit input").click(function(e) {
         var url = $("#stream-form").attr("action");
         var csrfToken = $("#stream-form input[name=_csrf]").val();
