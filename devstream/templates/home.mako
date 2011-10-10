@@ -2,7 +2,7 @@
 
 <%block name="content_inner">
     <div class="grid_11 alpha">
-        <div id="stream">
+        <div id="content-inner">
             <form id="stream-form" action="${url('post_status')}" method="post">
                 <input type="hidden" name="_csrf" value="${session.get_csrf_token()}" />
                 <div class="form-field">
@@ -12,45 +12,8 @@
                     <input class="awesome large orange" type="submit" value="Submit" />
                 </div>
             </form>
-            <div id="stream-inner">
-                <div class="stream-item">
-                    <div class="mugshot">
-                        <a href="#"></a>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-meta">
-                            <a href="#">Marconi Moreto</a> <span class="time-ago">about 2 hours ago</span>
-                        </div>
-                        <div class="status">
-                            The quick brown fox jumps over the lazy dog.
-                        </div>
-                    </div>
-                </div>
-                <div class="stream-item">
-                    <div class="mugshot">
-                        <a href="#"></a>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-meta">
-                            <a href="#">Marconi Moreto</a> <span class="time-ago">about 2 hours ago</span>
-                        </div>
-                        <div class="status">
-                            The quick brown fox jumps over the lazy dog.
-                        </div>
-                    </div>
-                </div>
-                <div class="stream-item last">
-                    <div class="mugshot">
-                        <a href="#"></a>
-                    </div>
-                    <div class="status-info">
-                        <div class="status-meta">
-                            <a href="#">Marconi Moreto</a> <span class="time-ago">about 2 hours ago</span>
-                        </div>
-                        <div class="status">
-                            The quick brown fox jumps over the lazy dog.
-                        </div>
-                    </div>
+            <div id="stream">
+                <div id="stream-inner">
                 </div>
             </div>
         </div>

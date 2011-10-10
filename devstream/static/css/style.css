@@ -184,11 +184,15 @@ body {
 }
 header h1 {
     font-size: 25px;
+    font-family: minion-pro, Georgia, 'Times New Roman', Times, serif;
+    margin: 10px 0;
 }
 header h1 a {
     text-decoration: none;
+    color: #966 !important;
+    text-shadow: #ffffff 0 1px 0;
 }
-#stream {
+#content-inner {
     padding: 20px 0 20px 20px;
 }
 #sidebar {
@@ -199,7 +203,7 @@ header h1 a {
     float: left;
 }
 #stream-form .form-field textarea {
-    width: 500px;
+    width: 520px;
     height: 50px;
 }
 #stream-form .form-submit {
@@ -208,7 +212,7 @@ header h1 a {
 #stream-form {
     overflow: hidden;
 }
-#stream-inner {
+#stream {
     clear: both;
     margin: 20px 0 0 0;
 }
@@ -239,20 +243,24 @@ header h1 a {
 .stream-item .status-meta .time-ago {
     color: #888888;
     font-weight: normal;
+    margin: 0 0 0 5px;
 }
 .stream-item .status {
     margin: 5px 0 0 0;
 }
+.block {
+    margin-bottom: 10px;
+}
 .block .block-title {
-    background: #555152;
-    color: #ffffff;
     padding: 7px 10px;
-    font-size: 14px;
+    font-size: 21px;
     font-weight: normal;
+    font-family: minion-pro, Georgia, 'Times New Roman', Times, serif;
+    text-shadow: #cccccc 0 1px 0;
+    color: #966;
 }
 .block .content {
     padding: 10px;
-    background: #fdfbed;
 }
 .latest-status-item {
     overflow: hidden;
@@ -291,6 +299,9 @@ header h1 a {
 }
 .message.warning {
     color: #DB1C1C;
+}
+.hidden {
+    display: none;
 }
 
 /* jquery placeholder */
