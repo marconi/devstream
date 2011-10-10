@@ -43,6 +43,7 @@
 
 
     <script src="${h.assets_url(request, '/js/libs/jquery-1.5.1.min.js')}"></script>
+    <%block name="additional_script"></%block>
 
     <!-- scripts concatenated and minified via ant build script-->
     <script src="${h.assets_url(request, '/js/plugins.js')}"></script>

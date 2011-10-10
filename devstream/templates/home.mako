@@ -1,5 +1,9 @@
 <%inherit file="base.mako"/>
 
+<%block name="additional_script">
+<script src="${request.static_url('devstream:static/js/stream/jquery.stream.js')}"></script>
+</%block>
+
 <%block name="content_inner">
     <div class="grid_11 alpha">
         <div id="content-inner">
@@ -12,10 +16,7 @@
                     <input class="awesome large orange" type="submit" value="Submit" />
                 </div>
             </form>
-            <div id="stream">
-                <div id="stream-inner">
-                </div>
-            </div>
+            <div id="stream"></div>
         </div>
     </div>
     <div class="grid_5 omega">
