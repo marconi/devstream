@@ -14,6 +14,7 @@ from pyramid.httpexceptions import HTTPForbidden
 from devstream.forms.status import StatusSchema
 from devstream.forms import validate_form
 from devstream.models.status import Status
+from devstream.models.user import User
 
 log = logging.getLogger(__name__)
 
@@ -32,7 +33,9 @@ def do_post_status(request):
         response.update(result['errors'])
         raise HTTPBadRequest(body=json.dumps(response))
     else:
-        status = Status(status=result['data']['status'])
+        owner = User(email='caketoad@gmail.com', password='admin')
+        owner.save()
+        status = Status(status=result['data']['status'], owner=owner)
         status.save()
         response['message'] = _("Status successfully posted")
 

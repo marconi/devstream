@@ -1,49 +1,94 @@
 <%inherit file="base.mako"/>
 
-<%block name="additional_script">
-<script src="${request.static_url('devstream:static/js/stream/jquery.stream.js')}"></script>
+<%block name="additional_js">
+<script src="${h.assets_url(request, '/js/libs/underscore.min.js')}"></script>
+<script src="${h.assets_url(request, '/js/libs/backbone.js')}"></script>
+<script src="${h.assets_url(request, '/js/stream.js')}"></script>
+
+<script type="text/template" charset="utf-8" id="stream-item-template">
+  <div class="row">
+    <div class="span9 stream-item">
+      <div class="row meta">
+        <div class="span8 author">
+          <a href="javascript:void(0)" class="author-name"><%= title %></a>
+          <span class="label success">Git</span>
+        </div>
+        <div class="span2 date">23 Oct 2011</div>
+      </div>
+      <div class="content"><%= content %></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" charset="utf-8" id="stream-template">
+  <div class="stream-items">
+  </div>
+</script>
 </%block>
 
 <%block name="content_inner">
-    <div class="grid_11 alpha">
-        <div id="content-inner">
-            <form id="stream-form" action="${url('post_status')}" method="post">
-                <input type="hidden" name="_csrf" value="${session.get_csrf_token()}" />
-                <div class="form-field">
-                    <textarea name="status" rows="3" cols="60"></textarea>
-                </div>
-                <div class="form-submit">
-                    <input class="awesome large orange" type="submit" value="Submit" />
-                </div>
-            </form>
-            <div id="stream"></div>
-        </div>
+<form id="post-box" action="" method="post">
+  <div class="clearfix">
+    <div class="input">
+      <textarea class="xxlarge" id="status" name="status" rows="2"></textarea>
+      <input type="submit" value="Update" class="btn large primary" />
+      <span class="help-block">
+        Type whatever you want to say.
+      </span>
     </div>
-    <div class="grid_5 omega">
-        <div id="sidebar">
-            <div id="agenda" class="block">
-                <h3 class="block-title">${"Today's Agenda"}</h3>
-                <div class="content">
-                    hee
-                </div>
-            </div>
-            <div id="dev-status" class="block">
-                <h3 class="block-title">${"Dev Status"}</h3>
-                <div class="content">
-                    <div class="latest-status-item">
-                        <div class="status-light offline"></div>
-                        <div class="status-info">
-                            <div class="status-meta">
-                                <a href="#">Marconi Moreto</a>
-                            </div>
-                            <div class="status">
-                                <span class="time">[0:12]</span>
-                                The quick brown fox jumps over the lazy dog.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  </div>
+</form>
+
+<div id="stream-widget" class="row stream">
+  <div class="span10 stream-inner">
+
+    <div class="row">
+      <div class="span9 stream-item">
+        <div class="row meta">
+          <div class="span8 author">
+            <a href="javascript:void(0)" class="author-name">Marconi</a>
+            <span class="label success">Git</span>
+          </div>
+          <div class="span2 date">23 Oct 2011</div>
         </div>
+        <div class="content">
+          The quick brown fox jumps over the lazy dog.
+        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="span9 stream-item last">
+        <div class="row meta">
+          <div class="span8 author">
+            <a href="javascript:void(0)" class="author-name">Marconi</a>
+            <span class="label warning">Status</span>
+          </div>
+          <div class="span2 date">23 Oct 2011</div>
+        </div>
+        <div class="content">
+          The quick brown fox jumps over the lazy dog.
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /stream-inner -->
+</div> <!-- /stream -->
+</%block>
+
+<%block name="sidebar">
+<div id="team-status">
+  <h3>Online Members</h3>
+  <ul>
+    <li>
+      <a href="#">Marconi Moreto</a>
+    </li>
+    <li>
+      <a href="#">Mark Abuda</a>
+    </li>
+    <li>
+      <a href="#">Mark Abuda</a>
+    </li>
+  </ul>
+</div>
 </%block>

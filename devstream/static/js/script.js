@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+    var newDate = new Date;
+    var random_uid = newDate.getTime();
+
     /**
      * Helper function for display field errors
      */
@@ -23,8 +26,6 @@ $(document).ready(function() {
      */
     var socket = new io.Socket('localhost', {transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling']});
     socket.on('connect', function() {
-        var newDate = new Date;
-        var random_uid = newDate.getTime();
         socket.send({type: 'connect', uid: random_uid});
     });
     socket.on('message', function(obj) {
@@ -36,7 +37,7 @@ $(document).ready(function() {
     socket.on('disconnect', function() {
         console.log('Disconnected');
     });
-    // socket.connect();
+    socket.connect();
 
 
     $("#stream-form .form-submit input").click(function(e) {
@@ -50,7 +51,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {status: status, _csrf: csrfToken},
+            data: {status: status, _csrf: csrfToken, uid: random_uid},
             dataType: 'json',
             statusCode: {
                 // successful post

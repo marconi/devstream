@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><%block name="title"></%block></title>
+    <title><%block name="title">${_("DevStream")}</%block></title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -16,10 +16,8 @@
 
     <link rel="shortcut icon" href="${h.assets_url(request, '/favicon.ico')}">
 
-    <link rel="stylesheet" href="${h.assets_url(request, '/css/960/reset.css')}" type="text/css" />
-    <link rel="stylesheet" href="${h.assets_url(request, '/css/960/text.css')}" type="text/css" />
-    <link rel="stylesheet" href="${h.assets_url(request, '/css/960/960.css')}" type="text/css" />
-    <link rel="stylesheet" href="${h.assets_url(request, '/css/style.css')}" type="text/css" />
+    <link rel="stylesheet" href="${h.assets_url(request, '/css/bootstrap.min.css')}" type="text/css" />
+    <link rel="stylesheet" href="${h.assets_url(request, '/css/styles.css')}" type="text/css" />
 
     <script src="${h.assets_url(request, '/js/libs/modernizr-1.7.min.js')}"></script>
     <script src="${request.static_url('devstream:static/js/libs/socketio/socket.io.js')}"></script>
@@ -28,22 +26,48 @@
 
 </head>
 
-<body class="<%block name="body_classes"></%block>">
+<body>
 
-    <div id="container" class="container_16">
-        <header class="grid_16">
-            <h1 class="title"><a href="${url('home')}"><%block name="page_title">${_("DevStream")}</%block></a></h1>
-        </header>
-        <div id="main" role="main" class="grid_16">
-            <%block name="content"></%block>
+  <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">${_("DevStream")}</a>
+          <ul class="nav">
+            <li class="active"><a href="#">${_("Dashboard")}</a></li>
+            <li><a href="#about">${_("About")}</a></li>
+            <li><a href="#contact">${_("Contact")}</a></li>
+          </ul>
+          <form action="" class="pull-right">
+            <input class="input-small" type="text" placeholder="${_('Username')}">
+            <input class="input-small" type="password" placeholder="${_('Password')}">
+            <button class="btn" type="submit">${_("Sign-in")}</button>
+          </form>
         </div>
-        <footer>
-        </footer>
-    </div> <!-- eo #container -->
+      </div>
+    </div> <!-- /topbar -->
 
 
-    <script src="${h.assets_url(request, '/js/libs/jquery-1.5.1.min.js')}"></script>
-    <%block name="additional_script"></%block>
+    <div class="container">
+
+      <div class="content">
+        <%block name="page_header">
+        </%block>
+
+        <div class="row">
+          <%block name="content">
+          </%block>
+        </div>
+      </div>
+
+      <footer>
+        <p>${_("&copy; Company 2011") | n}</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <script src="${h.assets_url(request, '/js/libs/jquery.min.js')}"></script>
+    <%block name="additional_js"></%block>
 
     <!-- scripts concatenated and minified via ant build script-->
     <script src="${h.assets_url(request, '/js/plugins.js')}"></script>
