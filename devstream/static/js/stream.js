@@ -45,6 +45,7 @@
             // listen for reset event
             this.collection.bind('reset', this.render);
             this.collection.bind('add', this.add, this);
+            this.collection.bind('remove', this.remove, this);
         },
         render: function() {
             // render the stream initially
@@ -72,6 +73,10 @@
         add: function() {
             // re-render the widget after adding item
             this.render();
+        },
+        remove: function() {
+            // re-render the widget after removing item
+            this.render();
         }
     });
 
@@ -80,7 +85,8 @@
      */
     window.Stream = Backbone.Router.extend({
         routes: {
-            '': 'home'
+            '': 'home',
+            'stream/:more': 'stream'
         },
         initialize: function(container) {
             this.container = container;
@@ -91,7 +97,30 @@
         home: function() {
             // render the widget by default
             $(this.container).append(this.streamView.render().el);
-        }
+        },
+        stream: function(action) {
+            var stream = this;
+            $.ajax({
+                type: "GET",
+                url: "/stream/" + action,
+                dataType: "json",
+                success: function(data, textStatus, jqXHR) {
+                    var collection = stream.streamView.collection;
+                    collection.add(data, {at: collection.size()});
+                },
+                statusCode: {
+                    201: function (data, textStatus, jqXHR) {
+                    },
+                    400: function (data, textStatus, jqXHR) {
+                        console.log("Error: " + data);
+                    },
+                    403: function (data, textStatus, jqXHR) {
+                    },
+                    405: function (data, textStatus, jqXHR) {
+                    }
+                }
+            });
+        },
     });
 
     $(document).ready(function() {

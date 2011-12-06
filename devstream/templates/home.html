@@ -6,22 +6,64 @@
 
 {% block head %}
 {{ super() }}
+
+<script type="text/template" charset="utf-8" id="stream-item-template">
+  <div class="span9 stream-item 
+    <% if (is_last === true) { %>
+      last
+    <% } %>
+    ">
+    <div class="row meta">
+      <div class="span8 author">
+        <a href="javascript:void(0)" class="author-name"><%= author %></a>
+        <% if (type === 'status') { %>
+          <span class="label warning">{{ _('Status') }}</span>
+        <% } else if (type === 'git') { %>
+          <span class="label success">{{ _('Git') }}</span>
+        <% } %>
+      </div>
+      <div class="span2 date"><%= created %></div>
+    </div>
+    <div class="content"><%= status %></div>
+  </div>
+</script>
+
+<script type="text/template" charset="utf-8" id="stream-template">
+  <div class="span10 stream-items stream-inner">
+  </div>
+</script>
+
 <script type="text/javascript" charset="utf-8">
   var streamItemData = [
       {
-          "title": "The Quick",
-          "content": "The quick brown fox jumps over the lazy dog!"
+          "author": "Marconi",
+          "created": "23 Oct 2011",
+          "status": "The quick brown fox jumps over the lazy dog!",
+          "type": "status"
       },
       {
-          "title": "Foo Bar",
-          "content": "Aliquam aliquet, est a ullamcorper condimentum."
+          "author": "June",
+          "created": "23 Oct 2011",
+          "status": "Aliquam aliquet, est a ullamcorper condimentum.",
+          "type": "status"
       }
   ];
+
+  var p = {
+      "author": "Nunc auctor bibendum",
+      "created": "23 Oct 2011",
+      "status": "Nunc auctor bibendum eros. Maecenas porta accumsan mauris.",
+      "type": "git"
+  }
 
   $(document).ready(function() {
     for (var i=0; i<streamItemData.length; i++) {
         streamApp.streamView.collection.add(new StreamItem(streamItemData[i]));
     }
+
+    var s = streamApp.streamView.collection.size();
+    streamApp.streamView.collection.add(new StreamItem(p), {at: s});
+
   });
 </script>
 {% endblock %}
