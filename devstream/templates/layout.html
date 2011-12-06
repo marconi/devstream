@@ -1,12 +1,85 @@
 <!DOCTYPE html>
-<head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>
-    {% block title %}{{ _('DevStream') }}{% endblock %}
-  </title>
-  
-</head>
-<body>
-  {% block content %}
-  {% endblock %}
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ _('DevStream') }}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"
+          type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/css/styles.css"
+          type="text/css" media="screen" />
+
+    <script type="text/javascript" charset="utf-8" 
+            src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" 
+            src="/static/js/underscore.min.js"></script>
+    <script type="text/javascript" charset="utf-8" 
+            src="/static/js/backbone.js"></script>
+    <script type="text/javascript" charset="utf-8" 
+            src="/static/js/stream.js"></script>
+
+    <script type="text/template" charset="utf-8" id="stream-item-template">
+      <div class="span9 stream-item 
+        <% if (is_last === true) { %>
+          last
+        <% } %>
+        ">
+        <div class="row meta">
+          <div class="span8 author">
+            <a href="javascript:void(0)" class="author-name"><%= title %></a>
+            <span class="label success">Git</span>
+          </div>
+          <div class="span2 date">23 Oct 2011</div>
+        </div>
+        <div class="content"><%= content %></div>
+      </div>
+    </script>
+    <script type="text/template" charset="utf-8" id="stream-template">
+      <div class="span10 stream-items stream-inner">
+      </div>
+    </script>
+
+    {% block head %}
+    {% endblock %}
+
+  </head>
+  <body>
+
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">{{ _('DevStream') }}</a>
+          <ul class="nav">
+            <li class="active"><a href="#">{{ _('Dashboard') }}</a></li>
+            <li><a href="#about">{{ _('About') }}</a></li>
+            <li><a href="#contact">{{ _('Contact') }}</a></li>
+          </ul>
+          <form action="" class="pull-right" method="post">
+            <input class="input-small" type="text" 
+                   placeholder="{{ _('Username') }}" />
+            <input class="input-small" type="password" 
+                   placeholder="{{ _('Password') }}" />
+            <button class="btn" type="submit">{{ _('Sign in') }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        {% block layout %}
+        {% endblock %}
+      </div>
+
+      <footer>
+        <p>{{ _('&copy; Company 2011') }}</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+

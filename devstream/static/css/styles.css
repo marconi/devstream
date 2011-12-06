@@ -1,0 +1,107 @@
+html, body {
+  background: #eee;
+}
+
+body {
+  padding-top: 40px;
+}
+
+.container > footer p {
+  text-align: center;
+}
+
+.container {
+  width: 820px;
+}
+
+.container > .content {
+  background-color: #fff;
+  padding: 20px;
+  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+  -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+          box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+.page-header {
+  background-color: #f5f5f5;
+  padding: 20px 20px 10px;
+  margin: -20px -20px 20px;
+}
+
+.content .span4 {
+  padding-left: 19px;
+  border-left: 1px solid #eee;
+  width: 200px;
+}
+
+footer {
+  padding: 0;
+  margin: 17px 0;
+}
+
+footer p {
+  margin: 0;
+}
+
+.topbar .btn {
+  border: 0;
+}
+
+.stream {
+
+}
+
+.stream-inner {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.stream-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  width: 560px;
+}
+
+.stream-item.last {
+  border-bottom: none;
+}
+
+.stream-item .meta .date {
+  font-size: 12px;
+  text-align: right;
+  width: 80px;
+}
+
+.stream-item .content {
+  margin: 5px 0 0 0;
+}
+
+#post-box .input {
+  margin-left: 0;
+}
+
+#post-box textarea {
+  width: 435px;
+}
+
+#post-box input {
+  width: 120px;
+  padding: 11px 14px;
+  font-size: 18px;
+  margin: 0 0 0 10px;
+}
+
+#team-status ul {
+  margin: 0;
+  list-style: none;
+}
+
+#team-status li {
+  padding: 0px 4px;
+  line-height: 13px;
+  margin: 0 0 5px 0;
+}

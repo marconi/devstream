@@ -1,9 +1,67 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 
 {% block title %}
   {{ super() }} | {{ _('Home') }}
 {% endblock %}
 
+{% block head %}
+{{ super() }}
+<script type="text/javascript" charset="utf-8">
+  var streamItemData = [
+      {
+          "title": "The Quick",
+          "content": "The quick brown fox jumps over the lazy dog!"
+      },
+      {
+          "title": "Foo Bar",
+          "content": "Aliquam aliquet, est a ullamcorper condimentum."
+      }
+  ];
+
+  $(document).ready(function() {
+    for (var i=0; i<streamItemData.length; i++) {
+        streamApp.streamView.collection.add(new StreamItem(streamItemData[i]));
+    }
+  });
+</script>
+{% endblock %}
+
 {% block content %}
-  {{ greetings }}
+<div class="span10">
+
+  <form id="post-box" action="" method="post">
+    <div class="clearfix">
+      <div class="input">
+        <textarea class="xxlarge" id="status" name="status" rows="2"></textarea>
+        <input type="submit" value="Update" class="btn large primary" />
+        <span class="help-block">
+          Type whatever you want to say.
+        </span>
+      </div>
+    </div>
+  </form>
+
+  <div id="main-stream">
+  </div>
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  <div class="span4">
+    <div id="team-status">
+      <h3>Online Members</h3>
+      <ul>
+        <li>
+          <a href="#">Marconi Moreto</a>
+        </li>
+        <li>
+          <a href="#">Mark Abuda</a>
+        </li>
+        <li>
+          <a href="#">Mark Abuda</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 {% endblock %}
