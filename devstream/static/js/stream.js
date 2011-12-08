@@ -4,17 +4,11 @@
      * Models and Collections
      */
 
-    window.StreamItem = Backbone.Model.extend({
-        defaults: function() {
-            return {
-                is_last: false
-            };
-        }
-    });
+    window.StreamItem = Backbone.Model.extend({});
 
     window.StreamItemList = Backbone.Collection.extend({
         model: StreamItem,
-        url: '/stream',
+        url: '/stream/',
         comparator: function(streamItem) {
             // sort in descending so the last added is at the top
             return -streamItem.get("id");
@@ -62,9 +56,12 @@
 
             // hide preloader by default
             this.$('.more-preloader').hide();
+
+            // TODO: load initial stream content via collection fetch
         },
         events: {
-            "click .stream-more a": "more"
+            "click #post-box input": "updateStatus",
+            "click .stream-more a": "moreStatus"
         },
         addItem: function(item) {
             var streamItemView = new StreamItemView({model: item});
@@ -73,14 +70,24 @@
         reset: function() {
             this.collection.each(this.addItem);
         },
-        more: function() {
+        updateStatus: function(e) {
+            var newStatus = {
+                author: '',
+                created: '',
+                status: this.$("textarea#status").val(),
+                type: 'status'
+            }
+            
+            e.preventDefault();
+        },
+        moreStatus: function(e) {
             var streamView = this;
+            var collection = streamView.collection;
 
             // hide show more link and show preloader
             streamView.$('.stream-more a').hide();
             streamView.$('.more-preloader').show();
 
-            var collection = this.collection;
             $.ajax({
                 type: "GET",
                 data: {last_id: collection.last().get("id"), num: 5},
@@ -94,12 +101,6 @@
                         streamView.$('.stream-more a').hide();
                     }
                     else {
-                        // set the current last item's 
-                        // is_last attribute to false
-                        collection.last().set({is_last: false});
-
-                        // set the last item the is_last attribute
-                        data[data.length-1].is_last = true;
                         collection.add(data);
                     }
                 },
@@ -117,7 +118,8 @@
                         console.log("Error: " + data);
                     }
                 }
-            }); 
+            });
+            e.preventDefault();
         }
     });
 

@@ -8,27 +8,36 @@
 {{ super() }}
 
 <script type="text/template" charset="utf-8" id="stream-item-template">
-  <div class="span9 stream-item 
-    <% if (is_last === true) { %>
-      last
-    <% } %>
-    ">
+  <div class="span9 stream-item">
     <div class="row meta">
-      <div class="span8 author">
+      <div class="span7 author">
         <a href="javascript:void(0)" class="author-name"><%= author %></a>
-        <% if (type === 'status') { %>
+        <% if (type.toLowerCase() === 'status') { %>
           <span class="label warning">{{ _('Status') }}</span>
-        <% } else if (type === 'git') { %>
+        <% } else if (type.toLowerCase() === 'git') { %>
           <span class="label success">{{ _('Git') }}</span>
         <% } %>
       </div>
-      <div class="span2 date"><%= created %></div>
+      <div class="span3 date"><%= created %></div>
     </div>
     <div class="content"><%= status %></div>
   </div>
 </script>
 
 <script type="text/template" charset="utf-8" id="stream-template">
+  <form id="post-box" action="" method="post">
+    <div class="clearfix">
+      <div class="input">
+        <textarea class="xxlarge" id="status" 
+                  name="status" rows="2"></textarea>
+        <input type="submit" value="{{ _('Update') }}" 
+               class="btn large primary" />
+        <span class="help-block">
+          {{ _('Type whatever you want to say.') }}
+        </span>
+      </div>
+    </div>
+  </form>
   <div class="span10 stream-items stream-inner">
   </div>
   <div class="span10 stream-more">
@@ -81,18 +90,6 @@
 {% block content %}
 <div class="span10">
 
-  <form id="post-box" action="" method="post">
-    <div class="clearfix">
-      <div class="input">
-        <textarea class="xxlarge" id="status" name="status" rows="2"></textarea>
-        <input type="submit" value="Update" class="btn large primary" />
-        <span class="help-block">
-          Type whatever you want to say.
-        </span>
-      </div>
-    </div>
-  </form>
-
   <div id="main-stream">
   </div>
 
@@ -102,7 +99,7 @@
 {% block sidebar %}
   <div class="span4">
     <div id="team-status">
-      <h3>Online Members</h3>
+      <h3>{{ _('Online Members') }}</h3>
       <ul>
         <li>
           <a href="#">Marconi Moreto</a>
