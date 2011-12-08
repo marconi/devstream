@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .generic import home
+from .generic import home, more

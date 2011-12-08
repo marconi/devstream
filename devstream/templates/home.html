@@ -31,27 +31,37 @@
 <script type="text/template" charset="utf-8" id="stream-template">
   <div class="span10 stream-items stream-inner">
   </div>
+  <div class="span10 stream-more">
+    <div class="more-preloader">
+      <img src="/static/images/preloader.gif" />
+      {{ _('Please wait') }}
+    </div>
+    <a href="#">{{ _('Show more') }}</a>
+  </div>
 </script>
 
 <script type="text/javascript" charset="utf-8">
   var streamItemData = [
       {
+          "id": 6,
           "author": "Marconi",
-          "created": "23 Oct 2011",
+          "created": "26 Oct 2011",
           "status": "The quick brown fox jumps over the lazy dog!",
           "type": "status"
       },
       {
+          "id": 5,
           "author": "June",
-          "created": "23 Oct 2011",
+          "created": "25 Oct 2011",
           "status": "Aliquam aliquet, est a ullamcorper condimentum.",
           "type": "status"
       }
   ];
 
   var p = {
+      "id": 4,
       "author": "Nunc auctor bibendum",
-      "created": "23 Oct 2011",
+      "created": "24 Oct 2011",
       "status": "Nunc auctor bibendum eros. Maecenas porta accumsan mauris.",
       "type": "git"
   }

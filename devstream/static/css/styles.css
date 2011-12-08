@@ -105,3 +105,21 @@ footer p {
   line-height: 13px;
   margin: 0 0 5px 0;
 }
+
+.stream-more {
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    background: #dddddd;
+}
+
+.stream-more a {
+    display: block;
+    padding: 5px;
+    text-align: center;
+}
+
+.more-preloader {
+    text-align: center;
+}
+

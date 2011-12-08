@@ -5,14 +5,19 @@
      */
 
     window.StreamItem = Backbone.Model.extend({
-        is_last: false
+        defaults: function() {
+            return {
+                is_last: false
+            };
+        }
     });
+
     window.StreamItemList = Backbone.Collection.extend({
         model: StreamItem,
         url: '/stream',
         comparator: function(streamItem) {
             // sort in descending so the last added is at the top
-            return -streamItem.get("cid");
+            return -streamItem.get("id");
         }
     });
 
@@ -26,7 +31,8 @@
             _.bindAll(this, 'render');
 
             // listen for change event
-            this.model.bind('change', this.render);
+            this.model.bind('change', this.render, this);
+            this.model.bind('destroy', this.remove, this);
 
             this.template = _.template($('#stream-item-template').html());
         },
@@ -34,8 +40,12 @@
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
+        },
+        remove: function() {
+            $(this.el).remove();
         }
     });
+
     window.StreamView = Backbone.View.extend({
         className: 'row stream',
         initialize: function() {
@@ -43,40 +53,71 @@
             this.template = _.template($('#stream-template').html());
 
             // listen for reset event
-            this.collection.bind('reset', this.render);
-            this.collection.bind('add', this.add, this);
-            this.collection.bind('remove', this.remove, this);
-        },
-        render: function() {
-            // render the stream initially
+            this.collection.bind('reset', this.reset, this);
+            this.collection.bind('add', this.addItem, this);
+
+            // render initially so adding items below
+            // triggers the render.
             $(this.el).html(this.template({}));
 
-            // get a hold of inner div
-            var $streamItems = this.$(".stream-items");
+            // hide preloader by default
+            this.$('.more-preloader').hide();
+        },
+        events: {
+            "click .stream-more a": "more"
+        },
+        addItem: function(item) {
+            var streamItemView = new StreamItemView({model: item});
+            this.$(".stream-items").append(streamItemView.render().el);
+        },
+        reset: function() {
+            this.collection.each(this.addItem);
+        },
+        more: function() {
             var streamView = this;
 
-            this.collection.each(function(streamItem, index) {
-                // if this is the last item,
-                // add a last class.
-                if ((index + 1) === streamView.collection.size()) {
-                    streamItem.set({is_last: true});
-                }
-                else {
-                    streamItem.set({is_last: false});
-                }
+            // hide show more link and show preloader
+            streamView.$('.stream-more a').hide();
+            streamView.$('.more-preloader').show();
 
-                var streamItemView = new StreamItemView({model: streamItem});
-                $streamItems.append(streamItemView.render().el);
-            });
-            return this;
-        },
-        add: function() {
-            // re-render the widget after adding item
-            this.render();
-        },
-        remove: function() {
-            // re-render the widget after removing item
-            this.render();
+            var collection = this.collection;
+            $.ajax({
+                type: "GET",
+                data: {last_id: collection.last().get("id"), num: 5},
+                url: "/stream/more",
+                dataType: "json",
+                success: function(data, textStatus, jqXHR) {
+                    if (data === null) {
+                        // if there's no more data,
+                        // hide the show more link and preloader.
+                        streamView.$('.more-preloader').hide();
+                        streamView.$('.stream-more a').hide();
+                    }
+                    else {
+                        // set the current last item's 
+                        // is_last attribute to false
+                        collection.last().set({is_last: false});
+
+                        // set the last item the is_last attribute
+                        data[data.length-1].is_last = true;
+                        collection.add(data);
+                    }
+                },
+                statusCode: {
+                    200: function (data, textStatus, jqXHR) {
+                        // only toggle back show more link and
+                        // preloader if there's still more data.
+                        if (data !== null) {
+                            // toggle show more and preloader
+                            streamView.$('.more-preloader').hide();
+                            streamView.$('.stream-more a').show();
+                        }
+                    },
+                    400: function (data, textStatus, jqXHR) {
+                        console.log("Error: " + data);
+                    }
+                }
+            }); 
         }
     });
 
@@ -85,42 +126,16 @@
      */
     window.Stream = Backbone.Router.extend({
         routes: {
-            '': 'home',
-            'stream/:more': 'stream'
+            '': 'home'
         },
         initialize: function(container) {
-            this.container = container;
             this.streamView = new StreamView({
+                el: $(container),
                 collection: new StreamItemList()
             });
         },
         home: function() {
-            // render the widget by default
-            $(this.container).append(this.streamView.render().el);
-        },
-        stream: function(action) {
-            var stream = this;
-            $.ajax({
-                type: "GET",
-                url: "/stream/" + action,
-                dataType: "json",
-                success: function(data, textStatus, jqXHR) {
-                    var collection = stream.streamView.collection;
-                    collection.add(data, {at: collection.size()});
-                },
-                statusCode: {
-                    201: function (data, textStatus, jqXHR) {
-                    },
-                    400: function (data, textStatus, jqXHR) {
-                        console.log("Error: " + data);
-                    },
-                    403: function (data, textStatus, jqXHR) {
-                    },
-                    405: function (data, textStatus, jqXHR) {
-                    }
-                }
-            });
-        },
+        }
     });
 
     $(document).ready(function() {
