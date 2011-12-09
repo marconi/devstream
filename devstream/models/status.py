@@ -18,7 +18,7 @@ class Status(Base):
 
     def __init__(self, status, type, user=None):
         if self.created is None:
-            self.created = datetime.utcnow()
+            self.created = datetime.now()
         if user:
             self.user = user
         self.status = status

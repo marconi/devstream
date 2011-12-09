@@ -81,7 +81,9 @@ footer p {
 }
 
 #post-box textarea {
-  width: 435px;
+  width: 560px;
+  font-size: 16px;
+  padding: 10px;
 }
 
 #post-box input {
@@ -102,11 +104,17 @@ footer p {
   margin: 0 0 5px 0;
 }
 
-.stream-more {
-    border-left: 1px solid #cccccc;
+.stream-more,
+.stream-empty {
+/*    border-left: 1px solid #cccccc;*/
     border-right: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
     background: #dddddd;
+}
+
+.stream-empty {
+    text-align: center;
+    padding: 5px 0;
 }
 
 .stream-more a {

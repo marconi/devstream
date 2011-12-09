@@ -16,7 +16,7 @@ class User(Base):
 
     def __init__(self, email, password):
         if self.created is None:
-            self.created = datetime.utcnow()
+            self.created = datetime.now()
         self.email = email
         self.password = password
 

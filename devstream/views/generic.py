@@ -15,31 +15,36 @@ def home():
     return render_template('home.html', greetings='Hello World!')
 
 
-@app.route('/stream/', defaults={'status_id': None}, methods=['GET', 'POST'])
-@app.route('/stream/<status_id>')
-def stream(status_id):
+@app.route('/status/',
+           defaults={'status_id': None}, methods=['GET', 'POST', 'PUT'])
+@app.route('/status/<status_id>')
+def status(status_id):
+    """ View for inserting, updating and retrieving a status
+    instance that haven't been added in the collection. """
     current_user = User.query.get(1)
     if request.method == "POST":  # inserting
-        # build the status posted and save to db
-        status = json.loads(request.data, object_hook=as_status)
-        status.user = current_user
-        db_session.add(status)
-        db_session.commit()
-
-        # return back the newly saved status with complete
-        # attributes so the js model will be updated.
-        created = status.created.strftime("%b %d %Y %I:%M %p")
-        return json.dumps(dict(id=status.id,
-                               status=status.status,
-                               type=status.type,
-                               created=created,
-                               username=status.user.username,
-                               user_id=status.user_id))
-
+        return insert_posted_status(current_user, request.data)
     elif request.method == "PUT":  # updating
-        print request.form
+        pass
+    else:  # fetch the status from database
+        pass
 
-    else:  # fetch latest status items
+
+@app.route('/stream/',
+           defaults={'status_id': None},  methods=['GET', 'POST', 'PUT'])
+@app.route('/stream/<status_id>')
+def stream(status_id):
+    """ View for inserting, updating, retrieving a status
+    instance that is added in the collection. Also used
+    for displaying the default status items on the stream. """
+    current_user = User.query.get(1)
+    if request.method == "POST":  # inserting
+        return insert_posted_status(current_user, request.data)
+    elif request.method == "PUT":  # updating
+        pass
+
+    # fetch the default status items for the stream
+    elif request.method == "GET" and not status_id:
         statuses = Status.query.filter(Status.user_id == current_user.id)
         statuses = statuses.order_by(Status.created.desc())
         statuses = statuses.limit(settings.DEFAULT_STREAM_ITEMS)
@@ -54,46 +59,48 @@ def stream(status_id):
                                     user_id=status.user_id))
         return json.dumps(status_list)
 
+    # fetch a status from the database
+    elif request.method == "GET" and status_id:
+        pass
+
 
 @app.route('/stream/more')
 @jsonify
 def more():
-    data = [{"id": 4,
-      "author": "Donec placerat",
-      "created": "23 Oct 2011",
-      "status": "Donec placerat. Nullam nibh dolor, blandit sed.",
-      "type": "status"
-    },
-    {"id": 3,
-      "author": "Donec placerat",
-      "created": "23 Oct 2011",
-      "status": "Donec placerat. Nullam nibh dolor, blandit sed.",
-      "type": "status"
-    },
-    {"id": 2,
-     "author": "Sed tempor",
-     "created": "22 Oct 2011",
-     "status": "imperdiet sit amet, neque. Nam mollis ultrices justo.",
-     "type": "git"
-    },
-    {"id": 1,
-     "author": "Sed vitae tellus",
-     "created": "21 Oct 2011",
-     "status": "Etiam sem arcu, eleifend sit amet, gravida eget.",
-     "type": "git"
-    }]
-
-    num = settings.DEFAULT_SHOW_MORE_ITEMS
+    current_user = User.query.get(1)
     last_id = int(request.args.get('last_id', 0))
 
-    next_index = None
-    for index, item in enumerate(data):
-        if item['id'] == last_id:
-            next_index = index + 1
-            break
+    statuses = Status.query.filter(Status.user_id == current_user.id)
+    statuses = Status.query.filter(Status.id < last_id)
+    statuses = statuses.order_by(Status.created.desc())
+    statuses = statuses.limit(settings.DEFAULT_SHOW_MORE_ITEMS)
 
-    if next_index:
-        streams = data[next_index:next_index + num]
-        return streams or None
+    status_list = []
+    for status in statuses:
+        created = status.created.strftime("%b %d %Y %I:%M %p")
+        status_list.append(dict(id=status.id,
+                                status=status.status,
+                                type=status.type,
+                                created=created,
+                                username=status.user.username,
+                                user_id=status.user_id))
+    return status_list or None
 
-    return None
+
+def insert_posted_status(owner, status_json):
+    """ Converts status json string into status instance,
+    saves it in database and returns the complete status in json format. """
+    status = json.loads(status_json, object_hook=as_status)
+    status.user = owner
+    db_session.add(status)
+    db_session.commit()
+
+    # return back the newly saved status with complete
+    # attributes so the js model will be updated.
+    created = status.created.strftime("%b %d %Y %I:%M %p")
+    return json.dumps(dict(id=status.id,
+                           status=status.status,
+                           type=status.type,
+                           created=created,
+                           username=status.user.username,
+                           user_id=status.user_id))

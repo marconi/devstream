@@ -4,7 +4,9 @@
      * Models and Collections
      */
 
-    window.StreamItem = Backbone.Model.extend({});
+    window.StreamItem = Backbone.Model.extend({
+        urlRoot: '/status/',
+    });
 
     window.StreamItemList = Backbone.Collection.extend({
         model: StreamItem,
@@ -57,15 +59,26 @@
             // hide preloader by default
             this.$('.more-preloader').hide();
 
-            // TODO: load initial stream content via collection fetch
+            // hide stream more link if there's no status
+            if (this.collection.length === 0) {
+                this.$('.stream-more').hide();
+                this.$('.stream-empty').show();
+            }
+            else {
+                this.$('.stream-empty').hide();
+            }
         },
         events: {
-            "click #post-box input": "updateStatus",
+            "keypress textarea#status": "updateStatus",
             "click .stream-more a": "moreStatus"
         },
         addItem: function(item) {
             var streamItemView = new StreamItemView({model: item});
             this.$(".stream-items").append(streamItemView.render().el);
+
+            // hide empty message, display show more link
+            this.$('.stream-empty').hide();
+            this.$('.stream-more').show();
         },
         reset: function() {
             // clear out existing rows, after all this is a reset
@@ -75,13 +88,26 @@
             this.collection.each(this.addItem);
         },
         updateStatus: function(e) {
-            var newStatus = {
-                author: '',
-                created: '',
-                status: this.$("textarea#status").val(),
-                type: 'status'
+            if (e.keyCode !== 13) {
+                return;
             }
-            
+            var collection = this.collection;
+            // create and save the status first before adding
+            // to the collection.
+            var newStatus = new StreamItem({
+                status: this.$("textarea#status").val(),
+                type: 'STATUS'
+            });
+            newStatus.save({}, {
+                success: function(model, response) {
+                    collection.add(model);
+                    collection.sort();
+                },
+                error: function(model, response) {
+                    console.log("Error saving status: " + response);
+                }
+            });
+            this.$("textarea#status").val("").focus();
             e.preventDefault();
         },
         moreStatus: function(e) {

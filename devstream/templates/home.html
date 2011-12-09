@@ -28,17 +28,15 @@
   <form id="post-box" action="" method="post">
     <div class="clearfix">
       <div class="input">
-        <textarea class="xxlarge" id="status" 
-                  name="status" rows="2"></textarea>
-        <input type="submit" value="{{ _('Update') }}" 
-               class="btn large primary" />
-        <span class="help-block">
-          {{ _('Type whatever you want to say.') }}
-        </span>
+        <textarea class="xxlarge" id="status" name="status" rows="2"
+          placeholder="{{ _('Type whatever you want to say.') }}"></textarea>
       </div>
     </div>
   </form>
   <div class="span10 stream-items stream-inner">
+  </div>
+  <div class="span10 stream-empty">
+    {{ _("No one has posted any status yet.") }}
   </div>
   <div class="span10 stream-more">
     <div class="more-preloader">
