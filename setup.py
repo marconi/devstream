@@ -4,7 +4,8 @@ import os
 from setuptools import setup, find_packages
 
 
-requires = ['Flask', 'flask-jsonify', 'SQLAlchemy', 'Babel', 'psycopg2']
+requires = ['Flask', 'flask-jsonify', 'SQLAlchemy', 'sqlalchemy-migrate',
+            'Babel', 'psycopg2']
 
 setup(name='devstream',
       version='0.1',
