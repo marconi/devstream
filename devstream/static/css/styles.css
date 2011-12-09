@@ -117,5 +117,9 @@ footer p {
 
 .more-preloader {
     text-align: center;
+    padding: 5px 0;
 }
 
+.more-preloader img {
+    vertical-align: top;
+}

@@ -6,7 +6,7 @@ from flaskext.jsonify import jsonify
 from devstream import app
 from devstream.libs.database import db_session
 from devstream.models.utils import as_status
-from devstream.models import User
+from devstream.models import User, Status
 
 
 @app.route('/')
@@ -32,10 +32,25 @@ def stream(status_id):
                                status=status.status,
                                type=status.type,
                                created=created,
+                               username=status.user.username,
                                user_id=status.user_id))
+
     elif request.method == "PUT":  # updating
         print request.form
-    return status_id or 'here'
+
+    else:  # fetch latest status items
+        statuses = Status.query.filter(Status.user_id == current_user.id)
+        statuses = statuses.order_by(Status.created.desc()).limit(1)
+        status_list = []
+        for status in statuses:
+            created = status.created.strftime("%b %d %Y %I:%M %p")
+            status_list.append(dict(id=status.id,
+                                    status=status.status,
+                                    type=status.type,
+                                    created=created,
+                                    username=status.user.username,
+                                    user_id=status.user_id))
+        return json.dumps(status_list)
 
 
 @app.route('/stream/more')

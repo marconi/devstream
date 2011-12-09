@@ -11,7 +11,7 @@
   <div class="span9 stream-item">
     <div class="row meta">
       <div class="span7 author">
-        <a href="javascript:void(0)" class="author-name"><%= author %></a>
+        <a href="javascript:void(0)" class="author-name"><%= username %></a>
         <% if (type.toLowerCase() === 'status') { %>
           <span class="label warning">{{ _('Status') }}</span>
         <% } else if (type.toLowerCase() === 'git') { %>
@@ -50,40 +50,40 @@
 </script>
 
 <script type="text/javascript" charset="utf-8">
-  var streamItemData = [
-      {
-          "id": 6,
-          "author": "Marconi",
-          "created": "26 Oct 2011",
-          "status": "The quick brown fox jumps over the lazy dog!",
-          "type": "status"
-      },
-      {
-          "id": 5,
-          "author": "June",
-          "created": "25 Oct 2011",
-          "status": "Aliquam aliquet, est a ullamcorper condimentum.",
-          "type": "status"
-      }
-  ];
-
-  var p = {
-      "id": 4,
-      "author": "Nunc auctor bibendum",
-      "created": "24 Oct 2011",
-      "status": "Nunc auctor bibendum eros. Maecenas porta accumsan mauris.",
-      "type": "git"
-  }
-
-  $(document).ready(function() {
-    for (var i=0; i<streamItemData.length; i++) {
-        streamApp.streamView.collection.add(new StreamItem(streamItemData[i]));
-    }
-
-    var s = streamApp.streamView.collection.size();
-    streamApp.streamView.collection.add(new StreamItem(p), {at: s});
-
-  });
+  // var streamItemData = [
+  //     {
+  //         "id": 6,
+  //         "author": "Marconi",
+  //         "created": "26 Oct 2011",
+  //         "status": "The quick brown fox jumps over the lazy dog!",
+  //         "type": "status"
+  //     },
+  //     {
+  //         "id": 5,
+  //         "author": "June",
+  //         "created": "25 Oct 2011",
+  //         "status": "Aliquam aliquet, est a ullamcorper condimentum.",
+  //         "type": "status"
+  //     }
+  // ];
+  // 
+  // var p = {
+  //     "id": 4,
+  //     "author": "Nunc auctor bibendum",
+  //     "created": "24 Oct 2011",
+  //     "status": "Nunc auctor bibendum eros. Maecenas porta accumsan mauris.",
+  //     "type": "git"
+  // }
+  // 
+  // $(document).ready(function() {
+  //   for (var i=0; i<streamItemData.length; i++) {
+  //       streamApp.streamView.collection.add(new StreamItem(streamItemData[i]));
+  //   }
+  // 
+  //   var s = streamApp.streamView.collection.size();
+  //   streamApp.streamView.collection.add(new StreamItem(p), {at: s});
+  // 
+  // });
 </script>
 {% endblock %}
 

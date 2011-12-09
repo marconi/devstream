@@ -83,6 +83,12 @@
         moreStatus: function(e) {
             var streamView = this;
             var collection = streamView.collection;
+            var lastItem = collection.last();
+            var data = {num: 5};
+
+            if (lastItem !== undefined) {
+                data['last_id'] = lastItem.get("id");
+            }
 
             // hide show more link and show preloader
             streamView.$('.stream-more a').hide();
@@ -90,7 +96,7 @@
 
             $.ajax({
                 type: "GET",
-                data: {last_id: collection.last().get("id"), num: 5},
+                data: data,
                 url: "/stream/more",
                 dataType: "json",
                 success: function(data, textStatus, jqXHR) {
