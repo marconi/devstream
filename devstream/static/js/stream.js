@@ -68,6 +68,10 @@
             this.$(".stream-items").append(streamItemView.render().el);
         },
         reset: function() {
+            // clear out existing rows, after all this is a reset
+            this.$(".stream-items .row").remove();
+
+            // then add each new item in the collection
             this.collection.each(this.addItem);
         },
         updateStatus: function(e) {
@@ -84,7 +88,7 @@
             var streamView = this;
             var collection = streamView.collection;
             var lastItem = collection.last();
-            var data = {num: 5};
+            var data = {};
 
             if (lastItem !== undefined) {
                 data['last_id'] = lastItem.get("id");
@@ -148,6 +152,7 @@
 
     $(document).ready(function() {
         window.streamApp = new Stream('#main-stream');
+        window.streamApp.streamView.collection.fetch();  // load default items
         Backbone.history.start();
     });
 
