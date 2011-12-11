@@ -19,8 +19,6 @@
             src="/static/js/backbone.js"></script>
     <script type="text/javascript" charset="utf-8" 
             src="/static/js/common.js"></script>
-    <script type="text/javascript" charset="utf-8" 
-            src="/static/js/stream.js"></script>
 
     {% block head %}
     {% endblock %}
@@ -63,6 +61,20 @@
     <div class="container">
 
       <div class="content">
+        {% block header %}
+        {% endblock %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert-message block-message {{ category }}">
+                <a class="close" href="#">×</a>
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         {% block layout %}
         {% endblock %}
       </div>

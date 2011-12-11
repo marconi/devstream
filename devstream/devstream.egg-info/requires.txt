@@ -1,0 +1,9 @@
+Flask
+flask-jsonify
+SQLAlchemy
+sqlalchemy-migrate
+Babel
+psycopg2
+Flask-WTF
+cryptacular
+Flask-Mail

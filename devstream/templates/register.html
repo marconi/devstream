@@ -5,10 +5,17 @@
   {{ super() }} | {{ _('Home') }}
 {% endblock %}
 
+{% block header %}
+<div class="page-header">
+  <h1>{{ _('Account Registration') }}</h1>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="span14">
 
   <form action="{{ url_for('register') }}" method="post">
+    {{ registration_form.csrf }}
     {{ render_field(registration_form.email) }}
     {{ render_field(registration_form.password) }}
     {{ render_field(registration_form.confirm) }}

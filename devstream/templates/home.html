@@ -7,6 +7,9 @@
 {% block head %}
 {{ super() }}
 
+<script type="text/javascript" charset="utf-8" 
+        src="/static/js/stream.js"></script>
+
 <script type="text/template" charset="utf-8" id="stream-item-template">
   <div class="span9 stream-item">
     <div class="row meta">
@@ -45,43 +48,6 @@
     </div>
     <a href="#">{{ _('Show more') }}</a>
   </div>
-</script>
-
-<script type="text/javascript" charset="utf-8">
-  // var streamItemData = [
-  //     {
-  //         "id": 6,
-  //         "author": "Marconi",
-  //         "created": "26 Oct 2011",
-  //         "status": "The quick brown fox jumps over the lazy dog!",
-  //         "type": "status"
-  //     },
-  //     {
-  //         "id": 5,
-  //         "author": "June",
-  //         "created": "25 Oct 2011",
-  //         "status": "Aliquam aliquet, est a ullamcorper condimentum.",
-  //         "type": "status"
-  //     }
-  // ];
-  // 
-  // var p = {
-  //     "id": 4,
-  //     "author": "Nunc auctor bibendum",
-  //     "created": "24 Oct 2011",
-  //     "status": "Nunc auctor bibendum eros. Maecenas porta accumsan mauris.",
-  //     "type": "git"
-  // }
-  // 
-  // $(document).ready(function() {
-  //   for (var i=0; i<streamItemData.length; i++) {
-  //       streamApp.streamView.collection.add(new StreamItem(streamItemData[i]));
-  //   }
-  // 
-  //   var s = streamApp.streamView.collection.size();
-  //   streamApp.streamView.collection.add(new StreamItem(p), {at: s});
-  // 
-  // });
 </script>
 {% endblock %}
 

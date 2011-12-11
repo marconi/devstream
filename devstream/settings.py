@@ -12,6 +12,18 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/devstream'
 # wtforms settings
 CSRF_ENABLED = True
 
+# Flask-Mail settings
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+DEFAULT_MAIL_SENDER = 'noreply@devstream.com'
+
 # custom settings
 DEFAULT_STREAM_ITEMS = 10
 DEFAULT_SHOW_MORE_ITEMS = 5
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
