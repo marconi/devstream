@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from 'helpers/forms.html' import render_field %}
+
+{% block title %}
+  {{ super() }} | {{ _('Home') }}
+{% endblock %}
+
+{% block content %}
+<div class="span14">
+
+  <form action="{{ url_for('register') }}" method="post">
+    {{ render_field(registration_form.email) }}
+    {{ render_field(registration_form.password) }}
+    {{ render_field(registration_form.confirm) }}
+    <div class="actions">
+      <input type="submit" class="btn primary" value="Submit" />
+    </div>
+  </form>
+
+</div>
+{% endblock %}
