@@ -5,8 +5,8 @@
 *.mo
 *.log
 *.pid
-/*.egg-info
-/.coverage
+*.egg-info
+.coverage
 
 # local
 /local.cfg
