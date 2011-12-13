@@ -20,8 +20,13 @@ MAIL_PASSWORD = None
 DEFAULT_MAIL_SENDER = 'noreply@devstream.com'
 
 # custom settings
+SITE_NAME = 'DevStream'
+SITE_DOMAIN_NAME = 'devstream.com'
+
 DEFAULT_STREAM_ITEMS = 10
 DEFAULT_SHOW_MORE_ITEMS = 5
+
+ACTIVATION_EXPIRATION = 1
 
 try:
     from local_settings import *

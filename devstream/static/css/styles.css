@@ -1,133 +1,109 @@
+/* Variables.less
+ * Variables to customize the look and feel of Bootstrap
+ * ----------------------------------------------------- */
 html, body {
-  background: #eee;
+  background: #eeeeee;
 }
-
 body {
   padding-top: 40px;
 }
-
-.container > footer p {
-  text-align: center;
+body .topbar .btn {
+  border: 0;
 }
-
-.container {
+body .container {
   width: 820px;
 }
-
-.container > .content {
-  background-color: #fff;
+body .container > .content {
+  background-color: #ffffff;
   padding: 20px;
-  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+  margin: 0 -20px;
   -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-          box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
-
-.page-header {
+body .container > .content .page-header {
   background-color: #f5f5f5;
   padding: 20px 20px 10px;
   margin: -20px -20px 20px;
 }
-
-.content .span4 {
+body .container > .content .span4 {
   padding-left: 19px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid #eeeeee;
   width: 200px;
 }
-
-footer {
+body .container > .content #registration-form, body .container > .content #registration-form .actions {
+  margin-bottom: 0;
+}
+body .container > footer {
   padding: 0;
   margin: 17px 0;
 }
-
-footer p {
+body .container > footer p {
+  text-align: center;
   margin: 0;
 }
-
-.topbar .btn {
-  border: 0;
-}
-
-.stream {
-
-}
-
-.stream-inner {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-}
-
-.stream-item {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  width: 560px;
-}
-
-.stream-item .meta .date {
-  font-size: 12px;
-  text-align: right;
-  width: 140px;
-}
-
-.stream-item .content {
-  margin: 5px 0 0 0;
-}
-
-#post-box .input {
-  margin-left: 0;
-}
-
-#post-box textarea {
+#main-stream #post-box textarea {
   width: 560px;
   font-size: 16px;
   padding: 10px;
 }
-
-#post-box input {
+#main-stream #post-box input {
   width: 120px;
   padding: 11px 14px;
   font-size: 18px;
   margin: 0 0 0 10px;
 }
-
+#main-stream #post-box .input {
+  margin-left: 0;
+}
+#main-stream .stream-inner {
+  background: #f5f5f5;
+  border: 1px solid #dddddd;
+}
+#main-stream .stream-inner .stream-item {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+  width: 560px;
+}
+#main-stream .stream-inner .stream-item .meta .date {
+  font-size: 12px;
+  text-align: right;
+  width: 140px;
+}
+#main-stream .stream-inner .stream-item .content {
+  margin: 5px 0 0 0;
+}
+#main-stream .stream-more, #main-stream .stream-empty {
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  background: #dddddd;
+}
+#main-stream .stream-empty {
+  text-align: center;
+  padding: 5px 0;
+}
+#main-stream .stream-more .more-preloader {
+  text-align: center;
+  padding: 5px 0;
+}
+#main-stream .stream-more .more-preloader img {
+  vertical-align: top;
+}
+#main-stream .stream-more a {
+  display: block;
+  padding: 5px;
+  text-align: center;
+}
 #team-status ul {
   margin: 0;
   list-style: none;
 }
-
-#team-status li {
+#team-status ul li {
   padding: 0px 4px;
   line-height: 13px;
   margin: 0 0 5px 0;
-}
-
-.stream-more,
-.stream-empty {
-    border-left: 1px solid #dddddd;
-    border-right: 1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
-    background: #dddddd;
-}
-
-.stream-empty {
-    text-align: center;
-    padding: 5px 0;
-}
-
-.stream-more a {
-    display: block;
-    padding: 5px;
-    text-align: center;
-}
-
-.more-preloader {
-    text-align: center;
-    padding: 5px 0;
-}
-
-.more-preloader img {
-    vertical-align: top;
 }

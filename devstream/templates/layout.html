@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{ _('DevStream') }}</title>
+    <title>{% block title %}{{ _('DevStream') }}{% endblock %}</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css"
+    <link rel="stylesheet" href="/static/css/bootstrap.css"
           type="text/css" media="screen" />
     <link rel="stylesheet" href="/static/css/styles.css"
           type="text/css" media="screen" />
@@ -29,28 +29,30 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="/">{{ _('DevStream') }}</a>
+          <a class="brand" href="{{ url_for('common.home') }}">
+            {{ _('DevStream') }}
+          </a>
           <ul class="nav">
             <li
-              {% if request.endpoint == 'home' %}
-              class="active"
+              {% if request.endpoint == 'common.home' %}
+                class="active"
               {% endif %}>
               <a href="#">{{ _('Dashboard') }}</a>
             </li>
             <li><a href="#about">{{ _('About') }}</a></li>
             <li><a href="#contact">{{ _('Contact') }}</a></li>
             <li 
-              {% if request.endpoint == 'register' %}
-              class="active"
+              {% if request.endpoint == 'common.register' %}
+                class="active"
               {% endif %}
             >
-                <a href="{{ url_for('register') }}">{{ _('Register') }}</a>
+                <a href="{{ url_for('common.register') }}">{{ _('Register') }}</a>
             </li>
           </ul>
           <form action="" class="pull-right" method="post">
-            <input class="input-small" type="text" 
-                   placeholder="{{ _('Username') }}" />
-            <input class="input-small" type="password" 
+            <input class="input-small" type="text" name="email" 
+                   placeholder="{{ _('Email') }}" />
+            <input class="input-small" type="password" name="password" 
                    placeholder="{{ _('Password') }}" />
             <button class="btn primary" type="submit">{{ _('Login') }}</button>
           </form>

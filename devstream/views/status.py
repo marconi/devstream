@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, request, json, session
+from flask import Blueprint, render_template, request, json, session
 from flaskext.jsonify import jsonify
 
 from devstream import app
@@ -10,10 +10,12 @@ from devstream.models import User, Status
 from devstream import settings
 
 
-@app.route('/status/',
+status = Blueprint('status', __name__)
+
+@status.route('/status/',
            defaults={'status_id': None}, methods=['GET', 'POST', 'PUT'])
-@app.route('/status/<status_id>')
-def status(status_id):
+@status.route('/status/<status_id>')
+def status_detail(status_id):
     """ View for inserting, updating and retrieving a status
     instance that haven't been added in the collection. """
     current_user = User.query.get(1)
@@ -25,9 +27,9 @@ def status(status_id):
         pass
 
 
-@app.route('/stream/',
+@status.route('/stream/',
            defaults={'status_id': None},  methods=['GET', 'POST', 'PUT'])
-@app.route('/stream/<status_id>')
+@status.route('/stream/<status_id>')
 def stream(status_id):
     """ View for inserting, updating, retrieving a status
     instance that is added in the collection. Also used
@@ -59,7 +61,7 @@ def stream(status_id):
         pass
 
 
-@app.route('/stream/more')
+@status.route('/stream/more')
 @jsonify
 def more():
     current_user = User.query.get(1)

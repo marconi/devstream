@@ -12,15 +12,12 @@ class Status(Base):
     id = Column(Integer, primary_key=True)
     status = Column(String(255))
     type = Column(Enum('STATUS', 'GIT', name='status_types'))
-    created = Column(DateTime)
+    created = Column(DateTime, default=datetime.now())
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", backref=backref('statuses'))
 
-    def __init__(self, status, type, user=None):
-        if self.created is None:
-            self.created = datetime.now()
-        if user:
-            self.user = user
+    def __init__(self, status, user=None, type='STATUS'):
+        self.user = user
         self.status = status
         self.type = type
 

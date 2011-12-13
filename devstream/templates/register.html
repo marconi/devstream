@@ -2,7 +2,7 @@
 {% from 'helpers/forms.html' import render_field %}
 
 {% block title %}
-  {{ super() }} | {{ _('Home') }}
+  {{ super() }} | {{ _('Register') }}
 {% endblock %}
 
 {% block header %}
@@ -14,7 +14,8 @@
 {% block content %}
 <div class="span14">
 
-  <form action="{{ url_for('register') }}" method="post">
+  <form id="registration-form" action="{{ url_for('common.register') }}" 
+    method="post">
     {{ registration_form.csrf }}
     {{ render_field(registration_form.email) }}
     {{ render_field(registration_form.password) }}

@@ -1,0 +1,149 @@
+@import "../bootstrap/variables.less";
+
+@gray: #ddd;
+@grayLight: #ccc;
+@graySuperLight: #eee;
+@grayUltraLight: #f5f5f5;
+@contentBorderRadius: 0 0 6px 6px;
+@contentBorderShadow: 0 1px 2px rgba(0,0,0,.15);
+
+html, body {
+  background: @graySuperLight;
+}
+
+body {
+  padding-top: 40px;
+
+  .topbar .btn {
+    border: 0;
+  }
+
+  .container {
+    width: 820px;
+
+    > .content {
+      background-color: @white;
+      padding: 20px;
+      margin: 0 -20px;
+      -webkit-border-radius: @contentBorderRadius;
+         -moz-border-radius: @contentBorderRadius;
+              border-radius: @contentBorderRadius;
+      -webkit-box-shadow: @contentBorderShadow;
+         -moz-box-shadow: @contentBorderShadow;
+              box-shadow: @contentBorderShadow;
+
+      .page-header {
+        background-color: @grayUltraLight;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      .span4 {
+        padding-left: 19px;
+        border-left: 1px solid @graySuperLight;
+        width: 200px;
+      }
+
+      #registration-form,
+      #registration-form .actions {
+        margin-bottom: 0;
+      }
+    }
+
+    > footer {
+      padding: 0;
+      margin: 17px 0;
+
+      p {
+        text-align: center;
+        margin: 0;
+      }
+    }
+
+  }
+
+}
+
+#main-stream {
+  #post-box {
+    textarea {
+      width: 560px;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    input {
+      width: 120px;
+      padding: 11px 14px;
+      font-size: 18px;
+      margin: 0 0 0 10px;
+    }
+
+    .input {
+      margin-left: 0;
+    }
+  }
+
+  .stream-inner {
+    background: @grayUltraLight;
+    border: 1px solid @gray;
+
+    .stream-item {
+      padding: 10px;
+      border-bottom: 1px solid @gray;
+      width: 560px;
+
+      .meta .date {
+        font-size: 12px;
+        text-align: right;
+        width: 140px;
+      }
+
+      .content {
+        margin: 5px 0 0 0;
+      }
+
+    }
+  }
+
+  .stream-more,
+  .stream-empty {
+    border-left: 1px solid @gray;
+    border-right: 1px solid @grayLight;
+    border-bottom: 1px solid @grayLight;
+    background: @gray;
+  }
+
+  .stream-empty {
+    text-align: center;
+    padding: 5px 0;
+  }
+
+  .stream-more {
+    .more-preloader {
+      text-align: center;
+      padding: 5px 0;
+      img {
+          vertical-align: top;
+      }
+    }
+    a {
+      display: block;
+      padding: 5px;
+      text-align: center;
+    }
+  }
+
+}
+
+#team-status {
+  ul {
+    margin: 0;
+    list-style: none;
+    li {
+      padding: 0px 4px;
+      line-height: 13px;
+      margin: 0 0 5px 0;
+    }
+  }
+}

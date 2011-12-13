@@ -1,0 +1,15 @@
+Thank you for registering an account at {{ site_name }}.
+To activate your registration, please visit the following page:
+
+http://{{ domain_name }}{{ url_for('common.activate', activation_key=activation_key) }}
+
+{% trans expiration_days %}
+This page will expire in {{ expiration_days }} day.
+{% pluralize expiration_days %}
+This page will expire in {{ expiration_days }} days.
+{% endtrans %}
+
+
+***
+
+If you didn't register this account you can simply delete this email and we won't bother you again.
