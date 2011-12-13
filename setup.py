@@ -4,7 +4,7 @@ import os
 from setuptools import setup, find_packages
 
 
-requires = ['Flask', 'flask-jsonify', 'SQLAlchemy', 'sqlalchemy-migrate',
+requires = ['Flask', 'flask-jsonify', 'Flask-SQLAlchemy', 'sqlalchemy-migrate',
             'Babel', 'psycopg2', 'Flask-WTF', 'cryptacular', 'Flask-Mail',
             'Flask-Testing']
 

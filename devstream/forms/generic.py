@@ -3,7 +3,6 @@
 from flaskext.wtf import Form, TextField, PasswordField
 from flaskext.wtf import Required, Email, EqualTo, ValidationError
 
-from devstream.libs.database import db_session
 from devstream.models import User
 
 

@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
-from sqlalchemy.orm import relationship, backref
+# from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
+# from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
-from devstream.libs.database import Base
+from devstream.extensions import db
 
 
-class Status(Base):
+
+class Status(db.Model):
     __tablename__ = 'statuses'
-    id = Column(Integer, primary_key=True)
-    status = Column(String(255))
-    type = Column(Enum('STATUS', 'GIT', name='status_types'))
-    created = Column(DateTime, default=datetime.now())
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", backref=backref('statuses'))
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(255))
+    type = db.Column(db.Enum('STATUS', 'GIT', name='status_types'))
+    created = db.Column(db.DateTime, default=datetime.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", backref=db.backref('statuses'))
 
     def __init__(self, status, user=None, type='STATUS'):
         self.user = user

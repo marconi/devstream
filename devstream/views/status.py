@@ -4,9 +4,9 @@ from flask import Blueprint, render_template, request, json, session
 from flaskext.jsonify import jsonify
 
 from devstream import app
-from devstream.libs.database import db_session
 from devstream.models.utils import as_status
 from devstream.models import User, Status
+from devstream.extensions import db
 from devstream import settings
 
 
@@ -89,8 +89,8 @@ def insert_posted_status(owner, status_json):
     saves it in database and returns the complete status in json format. """
     status = json.loads(status_json, object_hook=as_status)
     status.user = owner
-    db_session.add(status)
-    db_session.commit()
+    db.session.add(status)
+    db.session.commit()
 
     # return back the newly saved status with complete
     # attributes so the js model will be updated.

@@ -8,10 +8,9 @@ from flaskext.mail import Message
 from flaskext.babel import gettext as _
 
 from devstream import app
-from devstream.extensions import mail
+from devstream.extensions import mail, db
 from devstream.models import User, ActivationKey
 from devstream.forms.generic import RegistrationForm
-from devstream.libs.database import db_session
 from devstream import settings
 
 
@@ -30,13 +29,13 @@ def register():
         hashed_password = manager.encode(registration_form.password.data)
         new_user = User(email=registration_form.email.data,
                         password=hashed_password)
-        db_session.add(new_user)
-        db_session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
         # create activation key
         activation_key = ActivationKey(new_user)
-        db_session.add(activation_key)
-        db_session.commit()
+        db.session.add(activation_key)
+        db.session.commit()
 
         # send verification email
         mail_context = {'site_name': settings.SITE_NAME,
@@ -52,7 +51,7 @@ def register():
 
         flash(_("Please check your email to verify your registration."),
               category="success")
-        return redirect(url_for('register'))
+        return redirect(url_for('common.register'))
     context = {'registration_form': registration_form}
     return render_template('register.html', **context)
 
@@ -64,11 +63,11 @@ def activate(activation_key):
     if activation and not activation.is_expired():
         activation.is_activated = True
         activation.user.is_active = True
-        db_session.commit()
+        db.session.commit()
         flash(_("Your account has been activated, you can now login."),
               category="success")
     else:
         msg = "The activation link is invalid or has expired, " \
               "click here to request for new activation."
         flash(_(msg), category="error")
-    return redirect(url_for('home'))
+    return redirect(url_for('common.home'))

@@ -3,21 +3,21 @@
 import random
 import hashlib
 from datetime import datetime, timedelta
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
-from sqlalchemy.orm import relationship, backref
+# from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+# from sqlalchemy.orm import relationship, backref
 
-from devstream.libs.database import Base
+from devstream.extensions import db
 from devstream import settings
 
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    email = Column(String(50), unique=True)
-    username = Column(String(50))
-    password = Column(String(80))
-    is_active = Column(Boolean, default=False)
-    created = Column(DateTime, default=datetime.now())
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(50), unique=True)
+    username = db.Column(db.String(50))
+    password = db.Column(db.String(80))
+    is_active = db.Column(db.Boolean, default=False)
+    created = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, email, password):
         self.email = email
@@ -27,15 +27,15 @@ class User(Base):
         return '<User %r>' % self.email
 
 
-class ActivationKey(Base):
+class ActivationKey(db.Model):
     __tablename__ = 'activation_keys'
-    id = Column(Integer, primary_key=True)
-    key = Column(String(50), unique=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", backref=backref('activation_key',
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(50), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", backref=db.backref('activation_key',
                                                 uselist=False))
-    is_activated = Column(Boolean, default=False)
-    created = Column(DateTime, default=datetime.now())
+    is_activated = db.Column(db.Boolean, default=False)
+    created = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, user):
         if not self.key:
