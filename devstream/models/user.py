@@ -3,18 +3,19 @@
 import random
 import hashlib
 from datetime import datetime, timedelta
+from flaskext.login import UserMixin
 
 from devstream.extensions import db
 from devstream import settings
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), unique=True)
     username = db.Column(db.String(50))
     password = db.Column(db.String(80))
-    is_active = db.Column(db.Boolean, default=False)
+    is_activated = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, email, password):
@@ -23,6 +24,9 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    def is_active(self):
+        return self.is_activated
 
 
 class ActivationKey(db.Model):

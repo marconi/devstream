@@ -6,11 +6,11 @@ from flask import (Blueprint, render_template, request, session, flash,
                    redirect, url_for)
 from flaskext.mail import Message
 from flaskext.babel import gettext as _
+from flaskext.login import login_user, logout_user, login_required
 
-from devstream import app
-from devstream.extensions import mail, db
+from devstream.extensions import mail, db, login_manager
 from devstream.models import User, ActivationKey
-from devstream.forms.generic import RegistrationForm
+from devstream.forms.generic import RegistrationForm, LoginForm
 from devstream import settings
 
 
@@ -62,7 +62,7 @@ def activate(activation_key):
                                                is_activated=False).first()
     if activation and not activation.is_expired():
         activation.is_activated = True
-        activation.user.is_active = True
+        activation.user.is_activated = True
         db.session.commit()
         flash(_("Your account has been activated, you can now login."),
               category="success")
@@ -70,4 +70,21 @@ def activate(activation_key):
         msg = "The activation link is invalid or has expired, " \
               "click here to request for new activation."
         flash(_(msg), category="error")
+    return redirect(url_for('common.home'))
+
+
+@common.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        login_user(login_form.user)
+    else:
+        msg = "It's either your email or password is incorrect."
+        flash(_(msg), category="error")
+    return redirect(url_for('common.home'))
+
+
+@common.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
     return redirect(url_for('common.home'))

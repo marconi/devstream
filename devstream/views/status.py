@@ -2,6 +2,7 @@
 
 from flask import Blueprint, render_template, request, json, session
 from flaskext.jsonify import jsonify
+from flaskext.login import current_user, login_required
 
 from devstream import app
 from devstream.models.utils import as_status
@@ -15,10 +16,10 @@ status = Blueprint('status', __name__)
 @status.route('/status/',
            defaults={'status_id': None}, methods=['GET', 'POST', 'PUT'])
 @status.route('/status/<status_id>')
+@login_required
 def status_detail(status_id):
     """ View for inserting, updating and retrieving a status
     instance that haven't been added in the collection. """
-    current_user = User.query.get(1)
     if request.method == "POST":  # inserting
         return insert_posted_status(current_user, request.data)
     elif request.method == "PUT":  # updating
@@ -30,11 +31,11 @@ def status_detail(status_id):
 @status.route('/stream/',
            defaults={'status_id': None},  methods=['GET', 'POST', 'PUT'])
 @status.route('/stream/<status_id>')
+@login_required
 def stream(status_id):
     """ View for inserting, updating, retrieving a status
     instance that is added in the collection. Also used
     for displaying the default status items on the stream. """
-    current_user = User.query.get(1)
     if request.method == "POST":  # inserting
         return insert_posted_status(current_user, request.data)
     elif request.method == "PUT":  # updating
@@ -63,8 +64,8 @@ def stream(status_id):
 
 @status.route('/stream/more')
 @jsonify
+@login_required
 def more():
-    current_user = User.query.get(1)
     last_id = int(request.args.get('last_id', 0))
 
     statuses = Status.query.filter(Status.user_id == current_user.id)

@@ -1,3 +1,5 @@
+{% from 'helpers/forms.html' import render_field %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -46,16 +48,27 @@
                 class="active"
               {% endif %}
             >
-                <a href="{{ url_for('common.register') }}">{{ _('Register') }}</a>
+                <a href="{{ url_for('common.register') }}">
+                  {{ _('Register') }}
+                </a>
             </li>
+            {% if current_user.is_authenticated() %}
+            <li>
+              <a href="{{ url_for('common.logout') }}">{{ _('Logout') }}</a>
+            </li>
+            {% endif %}
           </ul>
-          <form action="" class="pull-right" method="post">
-            <input class="input-small" type="text" name="email" 
-                   placeholder="{{ _('Email') }}" />
-            <input class="input-small" type="password" name="password" 
-                   placeholder="{{ _('Password') }}" />
+
+          {% if not current_user.is_authenticated() %}
+          <form action="{{ url_for('common.login') }}" class="pull-right" 
+            method="post">
+            {{ login_form.csrf }}
+            {{ login_form.email(class="input-small", placeholder="Email") }}
+            {{ login_form.password(class="input-small", placeholder="Password") }}
             <button class="btn primary" type="submit">{{ _('Login') }}</button>
           </form>
+          {% endif %}
+
         </div>
       </div>
     </div>

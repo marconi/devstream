@@ -54,8 +54,12 @@
 {% block content %}
 <div class="span10">
 
+  {% if current_user.is_authenticated() %}
   <div id="main-stream">
   </div>
+  {% else %}
+  here
+  {% endif %}
 
 </div>
 {% endblock %}
