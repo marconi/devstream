@@ -56,16 +56,16 @@
             // triggers the render.
             $(this.el).html(this.template({}));
 
-            // hide preloader by default
-            this.$('.more-preloader').hide();
+            // hide empty message and more link by default,
+            // only show preloader since it'll try to fetch.
+            this.$('.stream-empty').hide();
+            this.$('.stream-more').hide();
 
-            // hide stream more link if there's no status
-            if (this.collection.length === 0) {
-                this.$('.stream-more').hide();
-                this.$('.stream-empty').show();
-            }
-            else {
-                this.$('.stream-empty').hide();
+            // show more link and hide preloader
+            // if collection is not empty
+            if (this.collection.length > 0) {
+                this.$('.more-preloader').hide();
+                this.$('.stream-more').show();
             }
         },
         events: {
@@ -83,6 +83,21 @@
         reset: function() {
             // clear out existing rows, after all this is a reset
             this.$(".stream-items .row").remove();
+
+            // if we have data from the server,
+            // hide preloader and show more link.
+            if (this.collection.length > 0) {
+                this.$('.more-preloader').hide();
+                this.$('.stream-empty').hide();
+                this.$('.stream-more').show();
+            }
+            // if there's no status, show empty message
+            // and hide preloader and more link.
+            else {
+                this.$('.more-preloader').hide();
+                this.$('.stream-more').hide();
+                this.$('.stream-empty').show();
+            }
 
             // then add each new item in the collection
             this.collection.each(this.addItem);

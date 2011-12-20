@@ -3,8 +3,6 @@
 import random
 import hashlib
 from datetime import datetime, timedelta
-# from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
-# from sqlalchemy.orm import relationship, backref
 
 from devstream.extensions import db
 from devstream import settings

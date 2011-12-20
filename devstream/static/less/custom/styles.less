@@ -107,7 +107,8 @@ body {
   }
 
   .stream-more,
-  .stream-empty {
+  .stream-empty,
+  .more-preloader {
     border-left: 1px solid @gray;
     border-right: 1px solid @grayLight;
     border-bottom: 1px solid @grayLight;
@@ -119,14 +120,15 @@ body {
     padding: 5px 0;
   }
 
-  .stream-more {
-    .more-preloader {
-      text-align: center;
-      padding: 5px 0;
-      img {
-          vertical-align: top;
-      }
+  .more-preloader {
+    text-align: center;
+    padding: 5px 0;
+    img {
+        vertical-align: top;
     }
+  }
+
+  .stream-more {
     a {
       display: block;
       padding: 5px;

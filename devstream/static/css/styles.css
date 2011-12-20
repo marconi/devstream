@@ -76,7 +76,7 @@ body .container > footer p {
 #main-stream .stream-inner .stream-item .content {
   margin: 5px 0 0 0;
 }
-#main-stream .stream-more, #main-stream .stream-empty {
+#main-stream .stream-more, #main-stream .stream-empty, #main-stream .more-preloader {
   border-left: 1px solid #dddddd;
   border-right: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -86,11 +86,11 @@ body .container > footer p {
   text-align: center;
   padding: 5px 0;
 }
-#main-stream .stream-more .more-preloader {
+#main-stream .more-preloader {
   text-align: center;
   padding: 5px 0;
 }
-#main-stream .stream-more .more-preloader img {
+#main-stream .more-preloader img {
   vertical-align: top;
 }
 #main-stream .stream-more a {

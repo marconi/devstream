@@ -27,3 +27,4 @@ setup(name='devstream',
       install_requires=requires,
       tests_require=requires,
 )
+

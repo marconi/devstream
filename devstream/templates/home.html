@@ -38,14 +38,14 @@
   </form>
   <div class="span10 stream-items stream-inner">
   </div>
+  <div class="span10 more-preloader">
+    <img src="/static/images/preloader.gif" />
+    {{ _('Please wait') }}
+  </div>
   <div class="span10 stream-empty">
     {{ _("No one has posted any status yet.") }}
   </div>
   <div class="span10 stream-more">
-    <div class="more-preloader">
-      <img src="/static/images/preloader.gif" />
-      {{ _('Please wait') }}
-    </div>
     <a href="#">{{ _('Show more') }}</a>
   </div>
 </script>

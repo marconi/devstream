@@ -7,7 +7,9 @@ PROJEC_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 SECRET_KEY = '\xb0\x03\xc7nY\x0c\x91X\xb1\x87-=\x0b\x19\xf3w\x0c5@o\xc8\xdf\xfft'
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/devstream'
+DATABASE_NAME = 'devstream'
+DATABASE_URI_PREFIX = 'postgresql://postgres:postgres@localhost'
+SQLALCHEMY_DATABASE_URI = '%s/%s' % (DATABASE_URI_PREFIX, DATABASE_NAME)
 
 # wtforms settings
 CSRF_ENABLED = True
@@ -20,6 +22,7 @@ MAIL_PASSWORD = None
 DEFAULT_MAIL_SENDER = 'noreply@devstream.com'
 
 # custom settings
+TEST_DATABASE_NAME = 'devstream_test'
 SITE_NAME = 'DevStream'
 SITE_DOMAIN_NAME = 'devstream.com'
 
