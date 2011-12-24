@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
-# from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 
 from devstream.extensions import db

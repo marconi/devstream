@@ -18,6 +18,8 @@ class User(db.Model, UserMixin):
     is_activated = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now())
 
+    owned_groups = db.relationship("Group", backref="owner")
+
     def __init__(self, email, password):
         self.email = email
         self.password = password
@@ -35,7 +37,7 @@ class ActivationKey(db.Model):
     key = db.Column(db.String(50), unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship("User", backref=db.backref('activation_key',
-                                                uselist=False))
+                                                      uselist=False))
     is_activated = db.Column(db.Boolean, default=False)
     created = db.Column(db.DateTime, default=datetime.now())
 

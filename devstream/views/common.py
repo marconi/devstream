@@ -81,7 +81,7 @@ def login():
     else:
         msg = "It's either your email or password is incorrect."
         flash(_(msg), category="error")
-    return redirect(url_for('common.home'))
+    return redirect(url_for('dashboard.dashboard_home'))
 
 
 @common.route('/logout', methods=['GET'])

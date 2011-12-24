@@ -28,8 +28,8 @@ def status_detail(status_id):
         pass
 
 
-@status.route('/stream/',
-           defaults={'status_id': None},  methods=['GET', 'POST', 'PUT'])
+@status.route('/stream/', defaults={'status_id': None},
+              methods=['GET', 'POST', 'PUT'])
 @status.route('/stream/<status_id>')
 @login_required
 def stream(status_id):

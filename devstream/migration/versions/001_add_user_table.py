@@ -1,8 +1,7 @@
 from sqlalchemy import *
 from migrate import *
 
-from devstream.libs.database import metadata
-from devstream.models import User
+from devstream.extensions import db
 
 
 DeclarativeBase = db.make_declarative_base()

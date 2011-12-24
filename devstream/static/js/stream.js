@@ -5,7 +5,7 @@
      */
 
     window.StreamItem = Backbone.Model.extend({
-        urlRoot: '/status/',
+        urlRoot: '/status/'
     });
 
     window.StreamItemList = Backbone.Collection.extend({

@@ -22,40 +22,61 @@
           <div class="group-stats">
             <span>
               <%= members %> 
-              <% if (members.length == 1) { %>
-                member
+              <% if (members.length === 1) { %>
+                {{ _("member") }}
               <% } else { %>
-                members
+                {{ _("members") }}
               <% } %>
             </span>
           </div>
         </div>
       </div>
       <div class="group-activity">
-        Last activity: <%= last_activity %>
+        <% if (last_activity !== null) { %>
+          {{ _("Last activity") }}: <%= last_activity %>
+        <% } else { %>
+          {{ _("No activities yet") }}
+        <% } %>
       </div>
     </div>
   </a>
 </script>
 
 <script type="text/template" charset="utf-8" id="group-template">
-<ul>
-</ul>
-</script>
+<div class="modal-overlay"></div>
+<div class="modal-wrapper">
+  <div id="create-group-modal" class="modal">
+    <div class="modal-header">
+      <a href="#" class="close">×</a>
+      <h3>{{ _("Create new group") }}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="message"></div>
+      <form method="POST" action="">
+        <input type="text" name="groupName" placeholder="{{ _('Group name') }}" />
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn primary">{{ _("Submit") }}</a>
+    </div>
+  </div>
+</div>
 
-<script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
-  window.GroupsView.collection.add(new GroupItem({
-    name: "Group 1",
-    members: 10,
-    last_activity: "Dec 24 2011"
-  }));
-  window.GroupsView.collection.add(new GroupItem({
-    name: "Group 2",
-    members: 5,
-    last_activity: "Dec 24 2011"
-  }));
-});
+<div id="group-filter">
+  <form action="" method="POST">
+    <input type="text" name="group_filter" placeholder="{{ _('Filter groups') }}" />
+  </form>
+</div>
+
+<div id="group-list">
+  <ul>
+  </ul>
+</div>
+
+<div id="group-action-wrapper">
+  <a id="create-group" href="#" class="btn">{{ _("Create Group") }}</a>
+  <a id="leave-group" href="#" class="btn">{{ _("Leave Group") }}</a>
+</div>
 </script>
 {% endblock %}
 
@@ -69,19 +90,8 @@ $(document).ready(function() {
 
 {% block content %}
 <div class="span14">
-
-  <div id="group-filter">
-    <form action="" method="POST">
-      <input type="text" name="group_filter" placeholder="Filter groups" />
-    </form>
-  </div>
-
-  <div id="group-list">
-  </div>
-
-  <div id="group-action-wrapper">
-    <a href="#" class="btn">{{ _("Create Group") }}</a>
-    <a href="#" class="btn">{{ _("Leave Group") }}</a>
+  
+  <div id="dashboard-widget">
   </div>
 
 </div>

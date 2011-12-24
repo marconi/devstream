@@ -2,10 +2,15 @@ from sqlalchemy import *
 from migrate import *
 
 from devstream.extensions import db
-from devstream.models import Status
 
 
 DeclarativeBase = db.make_declarative_base()
+
+class User(DeclarativeBase):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    # ...
+
 
 class Status(DeclarativeBase):
     __tablename__ = 'statuses'

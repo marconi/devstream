@@ -6,18 +6,66 @@
 @grayUltraLight: #f5f5f5;
 @contentBorderRadius: 0 0 6px 6px;
 @contentBorderShadow: 0 1px 2px rgba(0,0,0,.15);
+@groupListBorderRadius: 4px 4px 4px 4px;
+@errorRed: #B94A48;
+@errorBorderRed: #EE5F5B;
+@successGreen: #468847;
+@successBorderGreen: #57A957;
 
 html, body {
   background: @graySuperLight;
 }
+html {
+  height: 100%;
+  position: relative;
+}
+
+.modal-overlay {
+  background: #777777;
+  opacity: 0.7;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.modal-wrapper {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  .modal {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0 auto;
+    z-index: 2
+  }
+  .message {
+    margin: 0 0 5px 0;
+    display: none;
+  }
+  .modal-body.error {
+    .message,
+    form input {
+      color: @errorRed;
+    }
+    form input {
+      border: 1px solid @errorBorderRed;
+    }
+  }
+  .modal-body.success .message {
+    color: @successGreen;
+  }
+}
 
 body {
   padding-top: 40px;
-
   .topbar .btn {
     border: 0;
   }
-
   .container {
     width: 820px;
 
@@ -65,6 +113,14 @@ body {
 }
 
 body.dashboard .container > .content .span14 {
+  #create-group-modal {
+    width: 340px;
+    margin-top: -81px;
+    margin-left: -125px;
+    form input {
+      width: 300px;
+    }
+  }
   #group-filter form input {
     background: url(../images/search-icon.png) no-repeat 0% 50%;
     padding-left: 22px;
@@ -72,11 +128,11 @@ body.dashboard .container > .content .span14 {
   #group-list {
     margin: 0 0 19px 0;
     overflow-y: auto;
-    height: 400px;
+    height: 300px;
     border: 1px solid @graySuperLight;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: @groupListBorderRadius;
+       -moz-border-radius: @groupListBorderRadius;
+            border-radius: @groupListBorderRadius;
     ul {
       padding: 0;
       margin: 0;

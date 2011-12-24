@@ -4,6 +4,47 @@
 html, body {
   background: #eeeeee;
 }
+html {
+  height: 100%;
+  position: relative;
+}
+.modal-overlay {
+  background: #777777;
+  opacity: 0.7;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.modal-wrapper {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.modal-wrapper .modal {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin: 0 auto;
+  z-index: 2;
+}
+.modal-wrapper .message {
+  margin: 0 0 5px 0;
+  display: none;
+}
+.modal-wrapper .modal-body.error .message, .modal-wrapper .modal-body.error form input {
+  color: #b94a48;
+}
+.modal-wrapper .modal-body.error form input {
+  border: 1px solid #ee5f5b;
+}
+.modal-wrapper .modal-body.success .message {
+  color: #468847;
+}
 body {
   padding-top: 40px;
 }
@@ -45,6 +86,14 @@ body .container > footer p {
   text-align: center;
   margin: 0;
 }
+body.dashboard .container > .content .span14 #create-group-modal {
+  width: 340px;
+  margin-top: -81px;
+  margin-left: -125px;
+}
+body.dashboard .container > .content .span14 #create-group-modal form input {
+  width: 300px;
+}
 body.dashboard .container > .content .span14 #group-filter form input {
   background: url(../images/search-icon.png) no-repeat 0% 50%;
   padding-left: 22px;
@@ -52,11 +101,11 @@ body.dashboard .container > .content .span14 #group-filter form input {
 body.dashboard .container > .content .span14 #group-list {
   margin: 0 0 19px 0;
   overflow-y: auto;
-  height: 400px;
+  height: 300px;
   border: 1px solid #eeeeee;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 4px 4px 4px 4px;
+  -moz-border-radius: 4px 4px 4px 4px;
+  border-radius: 4px 4px 4px 4px;
 }
 body.dashboard .container > .content .span14 #group-list ul {
   padding: 0;
