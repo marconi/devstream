@@ -45,6 +45,61 @@ body .container > footer p {
   text-align: center;
   margin: 0;
 }
+body.dashboard .container > .content .span14 #group-filter form input {
+  background: url(../images/search-icon.png) no-repeat 0% 50%;
+  padding-left: 22px;
+}
+body.dashboard .container > .content .span14 #group-list {
+  margin: 0 0 19px 0;
+  overflow-y: auto;
+  height: 400px;
+  border: 1px solid #eeeeee;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+body.dashboard .container > .content .span14 #group-list ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+body.dashboard .container > .content .span14 #group-list ul li {
+  border-bottom: 1px dotted #eeeeee;
+}
+body.dashboard .container > .content .span14 #group-list ul li a {
+  color: gray;
+  display: block;
+}
+body.dashboard .container > .content .span14 #group-list ul li a:hover {
+  text-decoration: none;
+  background: #049cdb;
+  color: #ffffff;
+}
+body.dashboard .container > .content .span14 #group-list .group-info, body.dashboard .container > .content .span14 #group-list .group-activity {
+  padding: 10px;
+}
+body.dashboard .container > .content .span14 #group-list .group-activity {
+  float: right;
+}
+body.dashboard .container > .content .span14 #group-list .span4 {
+  padding-left: 0;
+  border: 0;
+  width: 219px;
+  text-align: right;
+}
+body.dashboard .container > .content .span14 #group-list .group-name {
+  font-weight: bold;
+}
+body.dashboard .container > .content .span14 #group-list .group-stats {
+  font-style: italic;
+}
+body.dashboard .container > .content .span14 #group-list .group-selection {
+  padding: 19px 10px;
+  margin-right: 10px;
+  float: left;
+  background: #eeeeee;
+  border-right: 1px solid #dddddd;
+}
 #main-stream #post-box textarea {
   width: 560px;
   font-size: 16px;

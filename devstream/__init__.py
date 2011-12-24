@@ -5,6 +5,7 @@ from flask import Flask
 from devstream.extensions import babel, mail, db, login_manager
 from devstream.views.status import status
 from devstream.views.common import common
+from devstream.views.dashboard import dashboard
 from devstream.models import User
 from devstream.forms.generic import LoginForm
 
@@ -23,6 +24,7 @@ def create_app(config=None):
     # register blueprints
     app.register_blueprint(status)
     app.register_blueprint(common)
+    app.register_blueprint(dashboard)
 
     initialize_contexts(app)
 

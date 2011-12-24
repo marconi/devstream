@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ super() }} | {{ _('Dashboard') }}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript" charset="utf-8" 
+        src="/static/js/dashboard.js"></script>
+
+<script type="text/template" charset="utf-8" id="group-item-template">
+  <a href="#">
+    <div class="row">
+      <div class="span10">
+        <div class="group-selection">
+          <input type="checkbox" name="group-" />
+        </div>
+        <div class="group-info">
+          <div class="group-name"><%= name %></div>
+          <div class="group-stats">
+            <span>
+              <%= members %> 
+              <% if (members.length == 1) { %>
+                member
+              <% } else { %>
+                members
+              <% } %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="group-activity">
+        Last activity: <%= last_activity %>
+      </div>
+    </div>
+  </a>
+</script>
+
+<script type="text/template" charset="utf-8" id="group-template">
+<ul>
+</ul>
+</script>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+  window.GroupsView.collection.add(new GroupItem({
+    name: "Group 1",
+    members: 10,
+    last_activity: "Dec 24 2011"
+  }));
+  window.GroupsView.collection.add(new GroupItem({
+    name: "Group 2",
+    members: 5,
+    last_activity: "Dec 24 2011"
+  }));
+});
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="page-header">
+  <h1>{{ _('Dashboard') }}</h1>
+</div>
+{% endblock %}
+
+{% block body_classes %}dashboard{% endblock %}
+
+{% block content %}
+<div class="span14">
+
+  <div id="group-filter">
+    <form action="" method="POST">
+      <input type="text" name="group_filter" placeholder="Filter groups" />
+    </form>
+  </div>
+
+  <div id="group-list">
+  </div>
+
+  <div id="group-action-wrapper">
+    <a href="#" class="btn">{{ _("Create Group") }}</a>
+    <a href="#" class="btn">{{ _("Leave Group") }}</a>
+  </div>
+
+</div>
+{% endblock %}

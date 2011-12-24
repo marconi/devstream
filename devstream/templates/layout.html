@@ -26,7 +26,7 @@
     {% endblock %}
 
   </head>
-  <body>
+  <body class="{% block body_classes %}{% endblock %}">
 
     <div class="topbar">
       <div class="fill">
@@ -36,13 +36,20 @@
           </a>
           <ul class="nav">
             <li
-              {% if request.endpoint == 'common.home' %}
+              {% if request.endpoint == 'dashboard.dashboard_home' %}
                 class="active"
               {% endif %}>
-              <a href="#">{{ _('Dashboard') }}</a>
+              <a href="{{ url_for('dashboard.dashboard_home') }}">
+                {{ _('Dashboard') }}
+              </a>
             </li>
             <li><a href="#about">{{ _('About') }}</a></li>
             <li><a href="#contact">{{ _('Contact') }}</a></li>
+            {% if current_user.is_authenticated() %}
+            <li>
+              <a href="{{ url_for('common.logout') }}">{{ _('Logout') }}</a>
+            </li>
+            {% else %}
             <li 
               {% if request.endpoint == 'common.register' %}
                 class="active"
@@ -51,10 +58,6 @@
                 <a href="{{ url_for('common.register') }}">
                   {{ _('Register') }}
                 </a>
-            </li>
-            {% if current_user.is_authenticated() %}
-            <li>
-              <a href="{{ url_for('common.logout') }}">{{ _('Logout') }}</a>
             </li>
             {% endif %}
           </ul>

@@ -64,6 +64,65 @@ body {
 
 }
 
+body.dashboard .container > .content .span14 {
+  #group-filter form input {
+    background: url(../images/search-icon.png) no-repeat 0% 50%;
+    padding-left: 22px;
+  }
+  #group-list {
+    margin: 0 0 19px 0;
+    overflow-y: auto;
+    height: 400px;
+    border: 1px solid @graySuperLight;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      li {
+        border-bottom: 1px dotted @graySuperLight;
+        a {
+          color: gray;
+          display: block;
+        }
+        a:hover {
+          text-decoration: none;
+          background: @blue;
+          color: @white;
+        }
+      }
+    }
+    .group-info,
+    .group-activity {
+      padding: 10px;
+    }
+    .group-activity {
+      float: right;
+    }
+    .span4 {
+      padding-left: 0;
+      border: 0;
+      width: 219px;
+      text-align: right;
+    }
+    .group-name {
+      font-weight: bold;
+    }
+    .group-stats {
+      font-style: italic;
+    }
+    .group-selection {
+      padding: 19px 10px;
+      margin-right: 10px;
+      float: left;
+      background: @graySuperLight;
+      border-right: 1px solid @gray;
+    }
+  }
+}
+
 #main-stream {
   #post-box {
     textarea {
