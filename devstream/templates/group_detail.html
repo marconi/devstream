@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ super() }} | {{ group.name }}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript" charset="utf-8">
+  window.activeGroupId = {{ group.id }};
+</script>
+
+<script type="text/javascript" charset="utf-8" 
+        src="/static/js/stream.js"></script>
+
+<script type="text/template" charset="utf-8" id="stream-item-template">
+  <div class="span9 stream-item">
+    <div class="row meta">
+      <div class="span7 author">
+        <a href="javascript:void(0)" class="author-name"><%= username %></a>
+        <% if (type.toLowerCase() === 'status') { %>
+          <span class="label warning">{{ _('Status') }}</span>
+        <% } else if (type.toLowerCase() === 'git') { %>
+          <span class="label success">{{ _('Git') }}</span>
+        <% } %>
+      </div>
+      <div class="span3 date"><%= created %></div>
+    </div>
+    <div class="content"><%= status %></div>
+  </div>
+</script>
+
+<script type="text/template" charset="utf-8" id="stream-template">
+  <form id="post-box" action="" method="post">
+    <div class="clearfix">
+      <div class="input">
+        <textarea class="xxlarge" id="status" name="status" rows="2"
+          placeholder="{{ _('Type whatever you want to say.') }}"></textarea>
+      </div>
+    </div>
+  </form>
+  <div class="span10 stream-items stream-inner">
+  </div>
+  <div class="span10 more-preloader">
+    <img src="/static/images/preloader.gif" />
+    {{ _('Please wait') }}
+  </div>
+  <div class="span10 stream-empty">
+    {{ _("No one has posted any status yet.") }}
+  </div>
+  <div class="span10 stream-more">
+    <a href="#">{{ _('Show more') }}</a>
+  </div>
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="page-header">
+  <h1>{{ group.name }}</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="span10">
+
+  <div id="main-stream">
+  </div>
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+  <div class="span4">
+    <div id="team-status">
+      <h3>{{ _('Online Members') }}</h3>
+      <ul>
+        <li>
+          <a href="#">Marconi Moreto</a>
+        </li>
+        <li>
+          <a href="#">Mark Abuda</a>
+        </li>
+        <li>
+          <a href="#">Mark Abuda</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

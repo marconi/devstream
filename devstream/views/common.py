@@ -6,7 +6,8 @@ from flask import (Blueprint, render_template, request, session, flash,
                    redirect, url_for)
 from flaskext.mail import Message
 from flaskext.babel import gettext as _
-from flaskext.login import login_user, logout_user, login_required
+from flaskext.login import (current_user, login_user, logout_user,
+                            login_required)
 
 from devstream.extensions import mail, db, login_manager
 from devstream.models import User, ActivationKey
@@ -19,6 +20,8 @@ manager = BCRYPTPasswordManager()
 
 @common.route('/')
 def home():
+    if current_user.is_authenticated():
+        return redirect(url_for('dashboard.dashboard_home'))
     return render_template('home.html')
 
 
@@ -76,12 +79,14 @@ def activate(activation_key):
 @common.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
-    if login_form.validate_on_submit():
-        login_user(login_form.user)
-    else:
-        msg = "It's either your email or password is incorrect."
-        flash(_(msg), category="error")
-    return redirect(url_for('dashboard.dashboard_home'))
+    if request.method == "POST":
+        if login_form.validate_on_submit():
+            login_user(login_form.user)
+            redirect(url_for('dashboard.dashboard_home'))
+        else:
+            msg = "It's either your email or password is incorrect."
+            flash(_(msg), category="error")
+    return redirect(url_for('common.home'))
 
 
 @common.route('/logout', methods=['GET'])

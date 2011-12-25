@@ -12,11 +12,13 @@ class Status(db.Model):
     status = db.Column(db.String(255))
     type = db.Column(db.Enum('STATUS', 'GIT', name='status_types'))
     created = db.Column(db.DateTime, default=datetime.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship("User", backref=db.backref('statuses'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner = db.relationship("User", backref=db.backref('statuses'))
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
 
-    def __init__(self, status, user=None, type='STATUS'):
-        self.user = user
+    def __init__(self, status, group_id, owner=None, type='STATUS'):
+        self.group_id = group_id
+        self.owner = owner
         self.status = status
         self.type = type
 

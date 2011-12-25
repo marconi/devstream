@@ -36,7 +36,7 @@
           </a>
           <ul class="nav">
             <li
-              {% if request.endpoint == 'dashboard.dashboard_home' %}
+              {% if request.endpoint == 'dashboard.dashboard_home' or request.endpoint == 'dashboard.group' %}
                 class="active"
               {% endif %}>
               <a href="{{ url_for('dashboard.dashboard_home') }}">

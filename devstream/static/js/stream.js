@@ -67,6 +67,8 @@
                 this.$('.more-preloader').hide();
                 this.$('.stream-more').show();
             }
+
+            this.collection.fetch({data: {group_id: window.activeGroupId}});
         },
         events: {
             "keypress textarea#status": "updateStatus",
@@ -106,12 +108,19 @@
             if (e.keyCode !== 13) {
                 return;
             }
+
+            var rawStatus = this.$("textarea#status").val();
+            if (rawStatus.trim() === "") {
+                return;
+            }
+
             var collection = this.collection;
             // create and save the status first before adding
             // to the collection.
             var newStatus = new StreamItem({
-                status: this.$("textarea#status").val(),
-                type: 'STATUS'
+                status: rawStatus.trim(),
+                type: 'STATUS',
+                group_id: window.activeGroupId
             });
             newStatus.save({}, {
                 success: function(model, response) {
@@ -138,6 +147,9 @@
             // hide show more link and show preloader
             streamView.$('.stream-more a').hide();
             streamView.$('.more-preloader').show();
+
+            // append group_id
+            data['group_id'] = window.activeGroupId;
 
             $.ajax({
                 type: "GET",
@@ -193,7 +205,6 @@
 
     $(document).ready(function() {
         window.streamApp = new Stream('#main-stream');
-        window.streamApp.streamView.collection.fetch();  // load default items
         Backbone.history.start();
     });
 

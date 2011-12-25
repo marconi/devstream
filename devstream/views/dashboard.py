@@ -2,8 +2,10 @@
 
 import logging
 
-from flask import Blueprint, render_template, request, json
+from flask import (Blueprint, render_template, request, json, redirect, url_for,
+                   flash)
 from flaskext.login import current_user, login_required
+from flaskext.babel import gettext as _
 
 from devstream.models.utils import as_group
 from devstream.extensions import db
@@ -15,6 +17,7 @@ log = logging.getLogger(__file__)
 dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/dashboard')
+@login_required
 def dashboard_home():
     return render_template('dashboard.html')
 
@@ -23,15 +26,27 @@ def dashboard_home():
                  methods=['GET', 'POST', 'PUT'])
 @dashboard.route('/group/<group_id>')
 @login_required
-def group_detail(group_id):
+def group(group_id):
     """ View for inserting, updating and retrieving a group
     instance that haven't been added in the collection. """
     if request.method == "POST":  # inserting
         return insert_posted_group(current_user, request.data)
     elif request.method == "PUT":  # updating
         pass
-    else:  # fetch the status from database
-        pass
+
+     # fetch the status from database a.k.a group_detail
+    elif request.method == "GET" and group_id:
+        group = Group.query.get(group_id)
+
+        # check that current_user is a member or owner of the group.
+        # if not, redirect to dashboard and show message.
+        if current_user not in group.members:
+            msg = _("You don't have enough permission to access that group.")
+            flash(_(msg), category="error")
+            return redirect(url_for('dashboard.dashboard_home'))
+
+        context = {'group': group}
+        return render_template('group_detail.html', **context)
 
 
 @dashboard.route('/groups/', defaults={'group_id': None},

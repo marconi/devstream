@@ -20,6 +20,7 @@ class Group(db.Model):
     members = db.relationship("User",
                               secondary=memberships_association,
                               backref=db.backref('groups'))
+    stream = db.relationship("Status", backref=db.backref('group'))
 
     def __init__(self, name, user=None):
         self.name = name

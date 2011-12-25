@@ -6,7 +6,7 @@ from flaskext.login import current_user, login_required
 
 from devstream import app
 from devstream.models.utils import as_status
-from devstream.models import User, Status
+from devstream.models import User, Status, Group
 from devstream.extensions import db
 from devstream import settings
 
@@ -43,7 +43,9 @@ def stream(status_id):
 
     # fetch the default status items for the stream
     elif request.method == "GET" and not status_id:
-        statuses = Status.query.filter(Status.user_id == current_user.id)
+        group_id = int(request.args.get('group_id', 0))
+
+        statuses = Status.query.filter(Status.group_id == group_id)
         statuses = statuses.order_by(Status.created.desc())
         statuses = statuses.limit(settings.DEFAULT_STREAM_ITEMS)
         status_list = []
@@ -53,8 +55,9 @@ def stream(status_id):
                                     status=status.status,
                                     type=status.type,
                                     created=created,
-                                    username=status.user.username,
-                                    user_id=status.user_id))
+                                    username=status.owner.username,
+                                    owner_id=status.owner_id,
+                                    group_id=status.group_id))
         return json.dumps(status_list)
 
     # fetch a status from the database
@@ -67,9 +70,13 @@ def stream(status_id):
 @login_required
 def more():
     last_id = int(request.args.get('last_id', 0))
+    group_id = int(request.args.get('group_id', 0))
 
-    statuses = Status.query.filter(Status.user_id == current_user.id)
+    if not last_id or not group_id:
+        return None
+
     statuses = Status.query.filter(Status.id < last_id)
+    statuses = statuses.filter(Status.group_id == group_id)
     statuses = statuses.order_by(Status.created.desc())
     statuses = statuses.limit(settings.DEFAULT_SHOW_MORE_ITEMS)
 
@@ -80,8 +87,9 @@ def more():
                                 status=status.status,
                                 type=status.type,
                                 created=created,
-                                username=status.user.username,
-                                user_id=status.user_id))
+                                username=status.owner.username,
+                                owner_id=status.owner_id,
+                                group_id=status.group_id))
     return status_list or None
 
 
@@ -89,7 +97,12 @@ def insert_posted_status(owner, status_json):
     """ Converts status json string into status instance,
     saves it in database and returns the complete status in json format. """
     status = json.loads(status_json, object_hook=as_status)
-    status.user = owner
+    status.owner = owner
+
+    # append the status to the group
+    group = Group.query.get(status.group_id)
+    group.stream.append(status)
+
     db.session.add(status)
     db.session.commit()
 
@@ -100,5 +113,6 @@ def insert_posted_status(owner, status_json):
                            status=status.status,
                            type=status.type,
                            created=created,
-                           username=status.user.username,
-                           user_id=status.user_id))
+                           username=status.owner.username,
+                           owner_id=status.owner_id,
+                           group_id=status.group_id))
