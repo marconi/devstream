@@ -13,7 +13,6 @@ memberships_association = db.Table('group_memberships', db.metadata,
 
 class Group(db.Model):
     __tablename__ = 'groups'
-    __mapper_args__ = {'order_by': 'created DESC'}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     created = db.Column(db.DateTime, default=datetime.now())
@@ -36,11 +35,3 @@ class Group(db.Model):
 
     def __repr__(self):
         return '<Group %r>' % self.name
-
-
-# class GroupMembership(db.Model):
-#     __tablename__ = 'group_memberships'
-#     
-# 
-#     def __repr__(self):
-#         return '<GroupMembership %r>' % self.name

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from flask import Blueprint, render_template, request, json
 from flaskext.login import current_user, login_required
 
@@ -8,6 +10,8 @@ from devstream.extensions import db
 from devstream.models import Group, User
 
 
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__file__)
 dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/dashboard')
@@ -55,6 +59,24 @@ def groups(group_id):
         return json.dumps(group_list)
 
 
+@dashboard.route('/groups/leave', methods=['POST'])
+@login_required
+def groups_leave():
+    ids = [int(i) for i in request.form['ids'].split('&')]
+    groups = Group.query.filter(Group.id.in_(ids))
+    for group in groups:
+        # if the current user is the owner,
+        # delete the group.
+        # TODO: send notification to members that the group has been
+        # deleted by the owner.
+        if group.owner_id == current_user.id:
+            db.session.delete(group)
+        else:
+            group.members.remove(current_user)
+    db.session.commit()
+    return json.dumps({'ids': ids})
+
+
 def insert_posted_group(owner, status_json):
     """ Converts status json string into status instance,
     saves it in database and returns the complete group in json format. """
@@ -69,5 +91,5 @@ def insert_posted_group(owner, status_json):
     return json.dumps(dict(id=group.id,
                            name=group.name,
                            last_activity=group.last_activity(),
-                           user_id=group.owner.id,
+                           owner_id=group.owner.id,
                            members=group.get_members_count()))

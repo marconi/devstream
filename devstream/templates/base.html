@@ -1,5 +1,14 @@
 {% extends "layout.html" %}
 
+{% block head %}
+{{ super() }}
+{% if current_user.is_authenticated() %}
+  <script type="text/javascript" charset="utf-8">
+    window.currentUserId = {{ current_user.id }};
+  </script>
+{% endif %}
+{% endblock %}
+
 {% block layout %}
 <div class="row">
 

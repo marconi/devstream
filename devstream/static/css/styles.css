@@ -90,9 +90,16 @@ body.dashboard .container > .content .span14 #create-group-modal {
   width: 340px;
   margin-top: -81px;
   margin-left: -125px;
+  display: none;
 }
 body.dashboard .container > .content .span14 #create-group-modal form input {
   width: 300px;
+}
+body.dashboard .container > .content .span14 #leaving-group-modal {
+  display: none;
+  width: 400px;
+  margin-top: -90px;
+  margin-left: -200px;
 }
 body.dashboard .container > .content .span14 #group-filter form input {
   background: url(../images/search-icon.png) no-repeat 0% 50%;
@@ -129,6 +136,7 @@ body.dashboard .container > .content .span14 #group-list .group-info, body.dashb
 }
 body.dashboard .container > .content .span14 #group-list .group-activity {
   float: right;
+  text-align: right;
 }
 body.dashboard .container > .content .span14 #group-list .span4 {
   padding-left: 0;
@@ -138,6 +146,10 @@ body.dashboard .container > .content .span14 #group-list .span4 {
 }
 body.dashboard .container > .content .span14 #group-list .group-name {
   font-weight: bold;
+  font-size: 14px;
+}
+body.dashboard .container > .content .span14 #group-list .group-name.selected {
+  text-decoration: line-through;
 }
 body.dashboard .container > .content .span14 #group-list .group-stats {
   font-style: italic;
