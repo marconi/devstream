@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, request, json, session
 from flaskext.jsonify import jsonify
 from flaskext.login import current_user, login_required
 
-from devstream import app
 from devstream.models.utils import as_status
 from devstream.models import User, Status, Group
 from devstream.extensions import db

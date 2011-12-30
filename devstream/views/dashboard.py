@@ -10,6 +10,7 @@ from flaskext.babel import gettext as _
 from devstream.models.utils import as_group
 from devstream.extensions import db
 from devstream.models import Group, User
+from devstream.libs.roster import get_roster
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -44,6 +45,9 @@ def group(group_id):
             msg = _("You don't have enough permission to access that group.")
             flash(_(msg), category="error")
             return redirect(url_for('dashboard.dashboard_home'))
+
+        roster = get_roster(group_id)
+        log.debug(roster.get_online_users())
 
         context = {'group': group}
         return render_template('group_detail.html', **context)

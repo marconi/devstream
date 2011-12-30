@@ -8,7 +8,7 @@ from devstream.extensions import db
 DeclarativeBase = db.make_declarative_base()
 
 class User(DeclarativeBase):
-    __tablename__ = 'activation_keys'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     # ...
     is_active = db.Column(db.Boolean, default=False)

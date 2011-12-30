@@ -1,11 +1,9 @@
 {% extends "layout.html" %}
 
-{% block head %}
+{% block inline_scripts %}
 {{ super() }}
 {% if current_user.is_authenticated() %}
-  <script type="text/javascript" charset="utf-8">
-    window.currentUserId = {{ current_user.id }};
-  </script>
+  var currentUserId = {{ current_user.id }};
 {% endif %}
 {% endblock %}
 

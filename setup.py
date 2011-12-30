@@ -6,7 +6,8 @@ from setuptools import setup, find_packages
 
 requires = ['Flask', 'flask-jsonify', 'Flask-SQLAlchemy', 'sqlalchemy-migrate',
             'Babel', 'psycopg2', 'Flask-WTF', 'cryptacular', 'Flask-Mail',
-            'Flask-Testing', 'Flask-Login']
+            'Flask-Testing', 'Flask-Login', 'Flask-Babel', 'transaction',
+            'juggernaut']
 
 setup(name='devstream',
       version='0.1',
@@ -26,5 +27,8 @@ setup(name='devstream',
       zip_safe=False,
       install_requires=requires,
       tests_require=requires,
+	  dependency_links=[
+	    'http://nodeload.github.com/fredj/flask-jsonify/tarball/master#egg=flask-jsonify',
+	    'http://github.com/mitsuhiko/python-juggernaut/tarball/master#egg=juggernaut-0.2'
+	  ]
 )
-

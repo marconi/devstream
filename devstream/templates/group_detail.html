@@ -6,13 +6,10 @@
 
 {% block head %}
 {{ super() }}
-
-<script type="text/javascript" charset="utf-8">
-  window.activeGroupId = {{ group.id }};
-</script>
-
 <script type="text/javascript" charset="utf-8" 
         src="/static/js/stream.js"></script>
+<script type="text/javascript" charset="utf-8" 
+        src="/static/js/juggernaut.js"></script>
 
 <script type="text/template" charset="utf-8" id="stream-item-template">
   <div class="span9 stream-item">
@@ -30,7 +27,6 @@
     <div class="content"><%= status %></div>
   </div>
 </script>
-
 <script type="text/template" charset="utf-8" id="stream-template">
   <form id="post-box" action="" method="post">
     <div class="clearfix">
@@ -53,6 +49,15 @@
     <a href="#">{{ _('Show more') }}</a>
   </div>
 </script>
+{% endblock %}
+
+{% block inline_scripts %}
+{{ super() }}
+var activeGroupId = {{ group.id }};
+var jug = new Juggernaut();
+jug.subscribe("group" + activeGroupId, function(data){
+  console.log("Got data: " + data);
+});
 {% endblock %}
 
 {% block header %}
