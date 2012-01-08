@@ -3,11 +3,12 @@
 import logging
 from flask import (Blueprint, render_template, request, json, redirect, url_for,
                    flash)
+from flaskext.mail import Message
 from flaskext.login import current_user, login_required
 from flaskext.babel import gettext as _
 
 from devstream.models.utils import as_group
-from devstream.extensions import db
+from devstream.extensions import db, mail
 from devstream.models import Group, User
 from devstream.libs.roster import get_online_users
 
@@ -57,6 +58,24 @@ def group(group_id):
 
         context = {'group': group, 'online_users': online_users}
         return render_template('group_detail.html', **context)
+
+
+@dashboard.route('/group/invite', methods=['POST'])
+@login_required
+def group_invite():
+    emails = set([email for email in request.form['invites'].split('&')])
+
+    # send a message to each email
+    mail_context = {'site_name': settings.SITE_NAME,
+                    'domain_name': settings.SITE_DOMAIN_NAME,
+                    'activation_key': activation_key.key,
+                    'expiration_days': settings.ACTIVATION_EXPIRATION}
+    subject = render_template('mails/groups/invite_subject.txt', **mail_context)
+    msg = Message(subject=subject, recipients=emails)
+    msg.body = render_template('mails/groups/invite.txt', **mail_context)
+    mail.send(msg)
+
+    return json.dumps(list(emails))
 
 
 @dashboard.route('/groups/', defaults={'group_id': None},

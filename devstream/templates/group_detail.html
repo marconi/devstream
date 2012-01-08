@@ -54,6 +54,25 @@
 </script>
 
 <script type="text/template" charset="utf-8" id="invite-template">
+<div class="modal-overlay"></div>
+<div class="modal-wrapper">
+  <!-- Invite Members Dialog -->
+  <div id="invite-members-modal" class="modal">
+    <div class="modal-header">
+      <a href="#" class="close">×</a>
+      <h3>{{ _("Invite Members") }}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="message"></div>
+      <form method="POST" action="">
+        <textarea name="invite_emails" id="invite_emails" placeholder="{{ _("Enter the users email that you would like to invite. Separate each by comma.") }}"></textarea>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a id="send-invites" href="#" class="btn primary">{{ _("Send Invites") }}</a>
+    </div>
+  </div>
+</div>
 <a id="invite-members" href="#" class="btn success large">{{ _("Invite Members") }}</a>
 </script>
 {% endblock %}
@@ -63,20 +82,13 @@
 var activeGroupId = {{ group.id }};
 $(document).ready(function() {
   window.jug = new Juggernaut();
+  jug.meta = {user_id: currentUserId};
 
   // set the session for each jug so messages don't get repeated
   $.ajaxSetup({
     beforeSend: function(xhr){
       xhr.setRequestHeader("X-Session-ID", jug.sessionID);
     }
-  });
-
-  jug.meta = {user_id: currentUserId};
-  jug.on("connect", function(){ 
-    console.log("Connecting...");
-  });
-  jug.on("disconnect", function(){ 
-    console.log("Disconnected!");
   });
 
   // TODO: this mundane tasks should be in backbone.
@@ -116,6 +128,8 @@ $(document).ready(function() {
   <h1>{{ group.name }}</h1>
 </div>
 {% endblock %}
+
+{% block body_classes %}group-detail{% endblock %}
 
 {% block content %}
 <div class="span10">

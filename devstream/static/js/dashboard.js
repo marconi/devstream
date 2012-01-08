@@ -130,7 +130,7 @@
             this.$(".modal-overlay").show();
             this.$(".modal-wrapper").show();
             this.$("#create-group-modal").show();
-            this.$("input[name=groupName]").focus();
+            this.$("input[name=groupName]").val("").focus();
             e.preventDefault();
         },
         interceptFormSubmit: function(e) {

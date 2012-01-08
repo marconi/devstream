@@ -1,0 +1,1 @@
+{{ site_name }} - you have been invited
