@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-
 from flask import (Blueprint, render_template, request, json, redirect, url_for,
                    flash)
 from flaskext.login import current_user, login_required
@@ -10,7 +9,7 @@ from flaskext.babel import gettext as _
 from devstream.models.utils import as_group
 from devstream.extensions import db
 from devstream.models import Group, User
-from devstream.libs.roster import get_roster
+from devstream.libs.roster import get_online_users
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -46,10 +45,17 @@ def group(group_id):
             flash(_(msg), category="error")
             return redirect(url_for('dashboard.dashboard_home'))
 
-        roster = get_roster(group_id)
-        log.debug(roster.get_online_users())
+        # retrieve online users for this group
+        online_users = get_online_users(group_id)
 
-        context = {'group': group}
+        # since this view is being called prior to adding this
+        # user to the list of online users, it doesn't include
+        # this current user, so we add it manually.
+        online_users.add(current_user)
+
+        log.debug(online_users)
+
+        context = {'group': group, 'online_users': online_users}
         return render_template('group_detail.html', **context)
 
 
@@ -66,15 +72,16 @@ def groups(group_id):
     elif request.method == "PUT":  # updating
         pass
 
-    # fetch the default status items for the stream
+    # fetch the all the current user's groups
     elif request.method == "GET" and not group_id:
         group_list = []
         for group in current_user.groups:
             group_list.append(dict(id=group.id,
+                                   owner_id=group.owner_id,
                                    name=group.name,
                                    last_activity=group.last_activity(),
                                    user_id=current_user.id,
-                                   members=group.get_members_count()))
+                                   members=len(group.members)))
         return json.dumps(group_list)
 
 

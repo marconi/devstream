@@ -9,6 +9,8 @@
 <script type="text/javascript" charset="utf-8" 
         src="/static/js/stream.js"></script>
 <script type="text/javascript" charset="utf-8" 
+        src="/static/js/invites.js"></script>
+<script type="text/javascript" charset="utf-8" 
         src="/static/js/juggernaut.js"></script>
 
 <script type="text/template" charset="utf-8" id="stream-item-template">
@@ -27,6 +29,7 @@
     <div class="content"><%= status %></div>
   </div>
 </script>
+
 <script type="text/template" charset="utf-8" id="stream-template">
   <form id="post-box" action="" method="post">
     <div class="clearfix">
@@ -49,14 +52,62 @@
     <a href="#">{{ _('Show more') }}</a>
   </div>
 </script>
+
+<script type="text/template" charset="utf-8" id="invite-template">
+<a id="invite-members" href="#" class="btn success large">{{ _("Invite Members") }}</a>
+</script>
 {% endblock %}
 
 {% block inline_scripts %}
 {{ super() }}
 var activeGroupId = {{ group.id }};
-var jug = new Juggernaut();
-jug.subscribe("group" + activeGroupId, function(data){
-  console.log("Got data: " + data);
+$(document).ready(function() {
+  window.jug = new Juggernaut();
+
+  // set the session for each jug so messages don't get repeated
+  $.ajaxSetup({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader("X-Session-ID", jug.sessionID);
+    }
+  });
+
+  jug.meta = {user_id: currentUserId};
+  jug.on("connect", function(){ 
+    console.log("Connecting...");
+  });
+  jug.on("disconnect", function(){ 
+    console.log("Disconnected!");
+  });
+
+  // TODO: this mundane tasks should be in backbone.
+  jug.subscribe("group" + activeGroupId, function(data){
+    switch (data.msg_type) {
+      case "login":
+        if ($("#user-" + data.user_id).length !== 1) {
+          var liE = document.createElement("li");
+          var aE = document.createElement("a");
+          aE.innerHTML = (data.username) ? data.username : data.email;
+          liE.setAttribute("id", "user-" + data.user_id);
+          liE.appendChild(aE);
+          $("#team-status ul").append(liE);
+        }
+        break;
+      case "logout":
+        $("#team-status #user-" + data.user_id).remove();
+        break;
+      case "status":
+        // remove the msg_type key since its only used for routing
+        delete data.msg_type
+        var newStatus = new StreamItem(data);
+        streamApp.streamView.collection.add(newStatus);
+        streamApp.streamView.collection.sort();
+        break;
+      default:
+        console.log("Unknown message: ");
+        console.log(data);
+        break;
+    }
+  });
 });
 {% endblock %}
 
@@ -79,17 +130,26 @@ jug.subscribe("group" + activeGroupId, function(data){
   <div class="span4">
     <div id="team-status">
       <h3>{{ _('Online Members') }}</h3>
-      <ul>
-        <li>
-          <a href="#">Marconi Moreto</a>
-        </li>
-        <li>
-          <a href="#">Mark Abuda</a>
-        </li>
-        <li>
-          <a href="#">Mark Abuda</a>
-        </li>
-      </ul>
+      {% if online_users %}
+        <ul>
+          {% for online_user in online_users %}
+            <li id="user-{{ online_user.id }}">
+              <a href="#">
+                {% if online_user.username %}
+                  {{ online_user.username }}
+                {% else %}
+                  {{ online_user.email }}
+                {% endif %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>{{ _("No online users") }}</p>
+      {% endif %}
+    </div>
+
+    <div id="invites">
     </div>
   </div>
 {% endblock %}

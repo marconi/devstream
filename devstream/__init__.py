@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import threading
 from flask import Flask
 
 from devstream.extensions import babel, mail, db, login_manager
@@ -8,6 +9,7 @@ from devstream.views.common import common
 from devstream.views.dashboard import dashboard
 from devstream.models import User
 from devstream.forms.generic import LoginForm
+from devstream.libs.roster import _run_roster
 
 
 def create_app(config=None):
@@ -28,6 +30,11 @@ def create_app(config=None):
 
     initialize_contexts(app)
 
+    # spawn the roster thread to monitor roster activities
+    roster_thread = threading.Thread(target=_run_roster, args=(app,))
+    roster_thread.setDaemon(True)
+    roster_thread.start()
+
     return app
 
 
@@ -40,6 +47,7 @@ def initialize_contexts(app):
     """ Context initializer. Wraps context
     functions on context_processor  decorator. """
     app.context_processor(add_forms)
+
 
 def add_forms():
     login_form = LoginForm()

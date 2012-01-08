@@ -13,7 +13,7 @@
 <script type="text/template" charset="utf-8" id="group-item-template">
   <a href="/group/<%= id %>">
     <div class="row">
-      <div class="span10">
+      <div class="span9">
         <div class="group-selection">
           <input type="checkbox" name="group-<%= id %>" 
             <% if (selected === true) { %>checked="checked"<% } %>/>
@@ -25,7 +25,7 @@
           <div class="group-stats">
             <span>
               <%= members %>
-              <% if (members.length === 1) { %>
+              <% if (members === 1) { %>
                 {{ _("member") }}
               <% } else { %>
                 {{ _("members") }}
@@ -36,9 +36,11 @@
       </div>
       <div class="group-activity">
         <% if (last_activity !== null) { %>
-          {{ _("Last activity") }}: <%= last_activity %>
+          <span class="label important">{{ _("Last activity") }}: <%= last_activity %></span>
         <% } else { %>
           <span class="label warning">{{ _("No activities") }}</span>
+        <% } %>
+        <% if (owner_id === currentUserId) { %>
           <span class="label success">{{ _("Owner") }}</span>
         <% } %>
       </div>
@@ -70,16 +72,20 @@
   <div id="leaving-group-modal" class="modal">
     <div class="modal-header">
       <a href="#" class="close">×</a>
-      <h3>{{ _("Leaving owned group") }}</h3>
+      <h3 class="owner">{{ _("Leaving owned group") }}</h3>
+      <h3 class="member">{{ _("Leaving group") }}</h3>
     </div>
     <div class="modal-body">
-      <p>{{ _("You're trying to leave a group that is owned by you, doing so will delete the group. Are you sure you want to continue?") }}</p>
+      <p class="owner">{{ _("You're trying to leave a group that is owned by you, doing so will delete the group. Are you sure you want to continue?") }}</p>
+      <p class="member">{{ _("Are you sure you want to leave?") }}</p>
     </div>
     <div class="modal-footer">
       <a id="leaving-ok" href="#" class="btn">{{ _("Ok") }}</a>
       <a id="cancel" href="#" class="btn primary">{{ _("Cancel") }}</a>
     </div>
   </div>
+
+  
 </div>
 
 <div id="group-filter">

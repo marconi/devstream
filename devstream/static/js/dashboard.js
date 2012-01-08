@@ -8,6 +8,7 @@
         urlRoot: '/group/',
         defaults: function() {
             return {
+                owner_id: null,
                 name: null,
                 members: 0,
                 last_activity: null,
@@ -180,10 +181,34 @@
             e.preventDefault();
         },
         leaveGroup: function(e) {
+            // reset leaving group overlay
+            this.$("#leaving-group-modal h3").hide();
+            this.$("#leaving-group-modal .modal-body p").hide();
+
+            if (this._checkForOwnedGroup()) {
+                this.$("#leaving-group-modal h3.owner").show();
+                this.$("#leaving-group-modal .modal-body p.owner").show();
+            }
+            else {
+                this.$("#leaving-group-modal h3.member").show();
+                this.$("#leaving-group-modal .modal-body p.member").show();
+            }
+
+            // toggle title and body depending if the user is the
+            // owner or just a member of one of the groups selected.
             this.$(".modal-overlay").show();
             this.$(".modal-wrapper").show();
             this.$("#leaving-group-modal").show();
             e.preventDefault();
+        },
+        _checkForOwnedGroup: function() {
+            is_owner = false;
+            _.each(this.collection.selected(), function(group) {
+                if (group.get('owner_id') === currentUserId) {
+                    is_owner = true;
+                }
+            });
+            return is_owner;
         },
         leaveGroupSubmit: function(e) {
             var groupsView = this;

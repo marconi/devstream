@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import logging
+from juggernaut import Juggernaut
+
 from flask import Blueprint, render_template, request, json, session
 from flaskext.jsonify import jsonify
 from flaskext.login import current_user, login_required
@@ -10,6 +13,10 @@ from devstream.extensions import db
 from devstream import settings
 
 
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__file__)
+
+jug = Juggernaut()
 status = Blueprint('status', __name__)
 
 @status.route('/status/',
@@ -20,7 +27,14 @@ def status_detail(status_id):
     """ View for inserting, updating and retrieving a status
     instance that haven't been added in the collection. """
     if request.method == "POST":  # inserting
-        return insert_posted_status(current_user, request.data)
+        new_status = insert_posted_status(current_user, request.data)
+
+        new_status_tojug = dict(new_status)
+        new_status_tojug['msg_type'] = 'status'
+        jug.publish("group%s" % new_status['group_id'], new_status_tojug,
+                    except_=request.headers['X-Session-ID'])
+
+        return json.dumps(new_status)
     elif request.method == "PUT":  # updating
         pass
     else:  # fetch the status from database
@@ -36,7 +50,14 @@ def stream(status_id):
     instance that is added in the collection. Also used
     for displaying the default status items on the stream. """
     if request.method == "POST":  # inserting
-        return insert_posted_status(current_user, request.data)
+        new_status = insert_posted_status(current_user, request.data)
+
+        new_status_tojug = dict(new_status)
+        new_status_tojug['msg_type'] = 'status'
+        jug.publish("group%s" % new_status['group_id'], new_status_tojug,
+                    except_=request.headers['X-Session-ID'])
+
+        return json.dumps(new_status)
     elif request.method == "PUT":  # updating
         pass
 
@@ -108,10 +129,10 @@ def insert_posted_status(owner, status_json):
     # return back the newly saved status with complete
     # attributes so the js model will be updated.
     created = status.created.strftime("%b %d %Y %I:%M %p")
-    return json.dumps(dict(id=status.id,
-                           status=status.status,
-                           type=status.type,
-                           created=created,
-                           username=status.owner.username,
-                           owner_id=status.owner_id,
-                           group_id=status.group_id))
+    return dict(id=status.id,
+                status=status.status,
+                type=status.type,
+                created=created,
+                username=status.owner.username,
+                owner_id=status.owner_id,
+                group_id=status.group_id)

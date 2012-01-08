@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from devstream.extensions import db
+from devstream.models import Status
 
 
 memberships_association = db.Table('group_memberships', db.metadata,
@@ -28,10 +29,15 @@ class Group(db.Model):
 
     def last_activity(self):
         """ Return the timestamp from last group activity. """
-        return None
+        last_activity = Status.query.filter_by(group_id=self.id)
+        last_activity = last_activity.order_by(Status.created.desc()).first()
+        if last_activity:
+            last_activity = last_activity.created.strftime("%b %d %Y %I:%M %p")
+        return last_activity
 
     def get_members_count(self):
         """ Return all members of this group. """
+        
         return 0
 
     def __repr__(self):
