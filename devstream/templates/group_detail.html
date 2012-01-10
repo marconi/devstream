@@ -8,8 +8,12 @@
 {{ super() }}
 <script type="text/javascript" charset="utf-8" 
         src="/static/js/stream.js"></script>
+
+{% if group.owner.id == current_user.id %}
 <script type="text/javascript" charset="utf-8" 
         src="/static/js/invites.js"></script>
+{% endif %}
+
 <script type="text/javascript" charset="utf-8" 
         src="/static/js/juggernaut.js"></script>
 
@@ -53,6 +57,7 @@
   </div>
 </script>
 
+{% if group.owner.id == current_user.id %}
 <script type="text/template" charset="utf-8" id="invite-template">
 <div class="modal-overlay"></div>
 <div class="modal-wrapper">
@@ -75,6 +80,7 @@
 </div>
 <a id="invite-members" href="#" class="btn success large">{{ _("Invite Members") }}</a>
 </script>
+{% endif %}
 {% endblock %}
 
 {% block inline_scripts %}

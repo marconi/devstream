@@ -65,8 +65,8 @@
              // send invites
              $.ajax({
                  type: "POST",
-                 data: {invites: validEmails.join("&")},
-                 url: "/group/invite",
+                 data: {invites: validEmails.join("&"), group_id: activeGroupId},
+                 url: "/invite",
                  dataType: "json",
                  success: function(data, textStatus, jqXHR) {
                      // show success message
@@ -84,6 +84,10 @@
                          inviteView.$(".modal-body").addClass("error");
                          inviteView.$(".modal-body .message").html(msg);
                          inviteView.$(".modal-body .message").show();
+                     },
+                     404: function (data, textStatus, jqXHR) {
+                         // when the group_id passed doesn't exist
+                         
                      }
                  }
              });

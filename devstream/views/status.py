@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import logging
 from juggernaut import Juggernaut
 
@@ -14,14 +15,15 @@ from devstream import settings
 
 
 logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger(__file__)
+log = logging.getLogger(os.path.basename(__file__))
 
 jug = Juggernaut()
 status = Blueprint('status', __name__)
 
 @status.route('/status/',
-           defaults={'status_id': None}, methods=['GET', 'POST', 'PUT'])
-@status.route('/status/<status_id>')
+              defaults={'status_id': None},
+              methods=['GET', 'POST', 'PUT'])
+@status.route('/status/<int:status_id>')
 @login_required
 def status_detail(status_id):
     """ View for inserting, updating and retrieving a status
@@ -41,9 +43,10 @@ def status_detail(status_id):
         pass
 
 
-@status.route('/stream/', defaults={'status_id': None},
+@status.route('/stream/',
+              defaults={'status_id': None},
               methods=['GET', 'POST', 'PUT'])
-@status.route('/stream/<status_id>')
+@status.route('/stream/<int:status_id>')
 @login_required
 def stream(status_id):
     """ View for inserting, updating, retrieving a status

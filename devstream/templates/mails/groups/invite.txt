@@ -1,6 +1,13 @@
-You have been invited in {{ site_name }} to join the group {{ group_name }}.
+You have been invited in {{ site_name }} to join the group '{{ group.name }}'.
 
-If you already have an account at {{ site_name }}
+{% if is_registered %}
+Visit the group here:
+http://{{ domain_name }}{{ url_for('dashboard.group', group_id=group.id) }}
+{% else %}
+Follow the following link to verify invitation:
+http://{{ domain_name }}{{ url_for('dashboard.group_invite', invite_key=invite_key) }}
+{% endif %}
+
 
 ***
 

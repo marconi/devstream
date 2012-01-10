@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 requires = ['Flask', 'flask-jsonify', 'Flask-SQLAlchemy', 'sqlalchemy-migrate',
             'Babel', 'psycopg2', 'Flask-WTF', 'cryptacular', 'Flask-Mail',
             'Flask-Testing', 'Flask-Login', 'Flask-Babel', 'transaction',
-            'juggernaut', 'eventlet']
+            'juggernaut', 'gevent']
 
 setup(name='devstream',
       version='0.1',

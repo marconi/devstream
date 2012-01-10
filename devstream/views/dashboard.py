@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
 import logging
+import gevent
+from gevent import monkey
 from flask import (Blueprint, render_template, request, json, redirect, url_for,
                    flash)
 from flaskext.mail import Message
@@ -9,13 +12,15 @@ from flaskext.babel import gettext as _
 
 from devstream.models.utils import as_group
 from devstream.extensions import db, mail
-from devstream.models import Group, User
+from devstream.models import Group, User, InvitationKey
 from devstream.libs.roster import get_online_users
+from devstream import settings
 
 
 logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger(__file__)
+log = logging.getLogger(os.path.basename(__file__))
 dashboard = Blueprint('dashboard', __name__)
+monkey.patch_all()
 
 @dashboard.route('/dashboard')
 @login_required
@@ -23,9 +28,10 @@ def dashboard_home():
     return render_template('dashboard.html')
 
 
-@dashboard.route('/group/', defaults={'group_id': None},
+@dashboard.route('/group/',
+                 defaults={'group_id': None},
                  methods=['GET', 'POST', 'PUT'])
-@dashboard.route('/group/<group_id>')
+@dashboard.route('/group/<int:group_id>')
 @login_required
 def group(group_id):
     """ View for inserting, updating and retrieving a group
@@ -60,27 +66,65 @@ def group(group_id):
         return render_template('group_detail.html', **context)
 
 
-@dashboard.route('/group/invite', methods=['POST'])
+@dashboard.route('/invite',
+                 defaults={'invite_key': None},
+                 methods=['GET', 'POST'])
+@dashboard.route('/invite/<invite_key>')
 @login_required
-def group_invite():
-    emails = set([email for email in request.form['invites'].split('&')])
+def group_invite(invite_key):
+    if invite_key:
+        return "%s" % invite_key
+    else:
+        emails = set([email for email in request.form['invites'].split('&')])
+        group_id = int(request.form['group_id'])
+        group = Group.query.get_or_404(group_id)
 
-    # send a message to each email
-    mail_context = {'site_name': settings.SITE_NAME,
-                    'domain_name': settings.SITE_DOMAIN_NAME,
-                    'activation_key': activation_key.key,
-                    'expiration_days': settings.ACTIVATION_EXPIRATION}
-    subject = render_template('mails/groups/invite_subject.txt', **mail_context)
-    msg = Message(subject=subject, recipients=emails)
-    msg.body = render_template('mails/groups/invite.txt', **mail_context)
-    mail.send(msg)
+        mail_context = {'site_name': settings.SITE_NAME,
+                        'domain_name': settings.SITE_DOMAIN_NAME}
 
-    return json.dumps(list(emails))
+        for email in emails:
+            is_registered = False
+            user = User.query.filter_by(email=email).first()
+            if user:
+                is_registered = True
+
+                # if registered, check if the email provided
+                # is already a member, if it is just move to next email.
+                if user in group.members:
+                    log.debug("Ignoring email %s, already a member" % email)
+                    continue
+
+            # if email is not yet registered,
+            # generate an invite key.
+            if not is_registered:
+                mail_context['invite_key'] = '1234'
+
+                # we also need to keep a record of invitation for
+                # non-registered users so we can take action once user follows
+                # the link.
+                invite_key = InvitationKey(email, group)
+                db.session.add(invite_key)
+                db.session.commit()
+
+                mail_context['invite_key'] = invite_key.key
+
+            log.debug("Sending email to: %s" % email)
+            # send a message to each email
+            mail_context['group'] = group
+            mail_context['is_registered'] = is_registered
+
+            subject = render_template('mails/groups/invite_subject.txt',
+                                      **mail_context)
+            msg = Message(subject=subject, recipients=[email])
+            msg.body = render_template('mails/groups/invite.txt', **mail_context)
+            gevent.spawn(mail.send, msg)
+
+        return json.dumps(dict())
 
 
 @dashboard.route('/groups/', defaults={'group_id': None},
                  methods=['GET', 'POST', 'PUT'])
-@dashboard.route('/groups/<group_id>')
+@dashboard.route('/groups/<int:group_id>')
 @login_required
 def groups(group_id):
     """ View for inserting, updating, retrieving a group
