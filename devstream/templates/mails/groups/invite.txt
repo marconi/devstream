@@ -5,7 +5,7 @@ Visit the group here:
 http://{{ domain_name }}{{ url_for('dashboard.group', group_id=group.id) }}
 {% else %}
 Follow the following link to verify invitation:
-http://{{ domain_name }}{{ url_for('dashboard.group_invite', invite_key=invite_key) }}
+http://{{ domain_name }}{{ url_for('dashboard.invite_activate', invite_key=invite_key) }}
 {% endif %}
 
 

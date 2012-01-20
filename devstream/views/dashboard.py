@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import os
-import logging
+import random
+import string
 import gevent
+import logging
 from gevent import monkey
+from cryptacular.bcrypt import BCRYPTPasswordManager
 from flask import (Blueprint, render_template, request, json, redirect, url_for,
                    flash)
 from flaskext.mail import Message
-from flaskext.login import current_user, login_required
+from flaskext.login import current_user, login_required, login_user
 from flaskext.babel import gettext as _
 
 from devstream.models.utils import as_group
@@ -20,6 +23,7 @@ from devstream import settings
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(os.path.basename(__file__))
 dashboard = Blueprint('dashboard', __name__)
+manager = BCRYPTPasswordManager()
 monkey.patch_all()
 
 @dashboard.route('/dashboard')
@@ -48,7 +52,7 @@ def group(group_id):
         # check that current_user is a member or owner of the group.
         # if not, redirect to dashboard and show message.
         if current_user not in group.members:
-            msg = _("You don't have enough permission to access that group.")
+            msg = "You don't have enough permission to access that group."
             flash(_(msg), category="error")
             return redirect(url_for('dashboard.dashboard_home'))
 
@@ -66,60 +70,83 @@ def group(group_id):
         return render_template('group_detail.html', **context)
 
 
-@dashboard.route('/invite',
-                 defaults={'invite_key': None},
-                 methods=['GET', 'POST'])
-@dashboard.route('/invite/<invite_key>')
+@dashboard.route('/invite', methods=['POST'])
 @login_required
-def group_invite(invite_key):
-    if invite_key:
-        return "%s" % invite_key
-    else:
-        emails = set([email for email in request.form['invites'].split('&')])
-        group_id = int(request.form['group_id'])
-        group = Group.query.get_or_404(group_id)
+def group_invite():
+    emails = set([email for email in request.form['invites'].split('&')])
+    group_id = int(request.form['group_id'])
+    group = Group.query.get_or_404(group_id)
 
-        mail_context = {'site_name': settings.SITE_NAME,
-                        'domain_name': settings.SITE_DOMAIN_NAME}
+    mail_context = {'site_name': settings.SITE_NAME,
+                    'domain_name': settings.SITE_DOMAIN_NAME}
 
-        for email in emails:
-            is_registered = False
-            user = User.query.filter_by(email=email).first()
-            if user:
-                is_registered = True
+    for email in emails:
+        is_registered = False
+        user = User.query.filter_by(email=email).first()
+        if user:
+            is_registered = True
 
-                # if registered, check if the email provided
-                # is already a member, if it is just move to next email.
-                if user in group.members:
-                    log.debug("Ignoring email %s, already a member" % email)
-                    continue
+            # if registered, check if the email provided
+            # is already a member, if it is just move to next email.
+            if user in group.members:
+                log.debug("Ignoring email %s, already a member" % email)
+                continue
 
-            # if email is not yet registered,
-            # generate an invite key.
-            if not is_registered:
-                mail_context['invite_key'] = '1234'
+        # if email is not yet registered,
+        # generate an invite key.
+        if not is_registered:
+            # we also need to keep a record of invitation for
+            # non-registered users so we can take action once user follows
+            # the link.
+            invite_key = InvitationKey(email, group)
+            db.session.add(invite_key)
+            db.session.commit()
+            mail_context['invite_key'] = invite_key.key
 
-                # we also need to keep a record of invitation for
-                # non-registered users so we can take action once user follows
-                # the link.
-                invite_key = InvitationKey(email, group)
-                db.session.add(invite_key)
-                db.session.commit()
+        log.debug("Sending email to: %s" % email)
+        # send a message to each email
+        mail_context['group'] = group
+        mail_context['is_registered'] = is_registered
 
-                mail_context['invite_key'] = invite_key.key
+        subject = render_template('mails/groups/invite_subject.txt',
+                                  **mail_context)
+        msg = Message(subject=subject, recipients=[email])
+        msg.body = render_template('mails/groups/invite.txt', **mail_context)
+        gevent.spawn(mail.send, msg)
+    return json.dumps(dict())
 
-            log.debug("Sending email to: %s" % email)
-            # send a message to each email
-            mail_context['group'] = group
-            mail_context['is_registered'] = is_registered
 
-            subject = render_template('mails/groups/invite_subject.txt',
-                                      **mail_context)
-            msg = Message(subject=subject, recipients=[email])
-            msg.body = render_template('mails/groups/invite.txt', **mail_context)
-            gevent.spawn(mail.send, msg)
+@dashboard.route('/groupinvite/<invite_key>', methods=['GET'])
+def invite_activate(invite_key):
+    if invite_key:  # process invitation verification
+        invitation = InvitationKey.query.filter_by(key=invite_key,
+                                                   is_activated=False).first()
+        if invitation:
+            # if we have a valid key, meaning this user is not yet registered.
+            # create a user, tell him his password and that he needs to
+            # change it ASAP with a form where he can change it.
+            raw_pass = ''.join(random.choice(string.letters+string.digits) for i in xrange(8))
+            hashed_password = manager.encode(raw_pass)
+            new_user = User(email=invitation.email,
+                            password=hashed_password)
+            new_user.is_activated = True
+            db.session.add(new_user)
 
-        return json.dumps(dict())
+            # mark the key as activated
+            invitation.is_activated = True
+
+            # add the new user to the group
+            invitation.group.members.append(new_user)
+            db.session.commit()
+
+            # show his new password
+            msg = "Your account has been created and your password is: <strong>%s</strong>" % raw_pass
+            flash(_(msg), category="success")
+
+            # login the new user
+            login_user(new_user)
+            return redirect(url_for('dashboard.dashboard_home'))
+    return redirect(url_for('common.home'))
 
 
 @dashboard.route('/groups/', defaults={'group_id': None},

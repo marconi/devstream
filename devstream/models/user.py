@@ -31,7 +31,20 @@ class User(db.Model, UserMixin):
         return self.is_activated
 
 
-class ActivationKey(db.Model):
+class BaseKeyGenerator(object):
+    def generate_key(self, to_digest):
+        sha1 = hashlib.sha1(repr(settings.SECRET_KEY) + to_digest)
+        return sha1.hexdigest()
+
+    def is_expired(self):
+        exp = settings.ACTIVATION_EXPIRATION
+        expiration_date = self.created + timedelta(days=exp)
+        if datetime.now() >= expiration_date:
+            return True
+        return False
+
+
+class ActivationKey(db.Model, BaseKeyGenerator):
     __tablename__ = 'activation_keys'
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(50), unique=True)
@@ -43,22 +56,14 @@ class ActivationKey(db.Model):
 
     def __init__(self, user):
         if not self.key:
-            sha1 = hashlib.sha1(repr(settings.SECRET_KEY) + user.email)
-            self.key = sha1.hexdigest()
+            self.key = self.generate_key(user.email)
         self.user = user
 
     def __repr__(self):
         return '<ActivationKey %r>' % self.user.email
 
-    def is_expired(self):
-        exp = settings.ACTIVATION_EXPIRATION
-        expiration_date = self.created + timedelta(days=exp)
-        if datetime.now() >= expiration_date:
-            return True
-        return False
 
-
-class InvitationKey(db.Model):
+class InvitationKey(db.Model, BaseKeyGenerator):
     __tablename__ = 'invitation_keys'
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(50), unique=True)
@@ -70,8 +75,7 @@ class InvitationKey(db.Model):
 
     def __init__(self, email, group):
         if not self.key:
-            sha1 = hashlib.sha1(repr(settings.SECRET_KEY) + email + group.name)
-            self.key = sha1.hexdigest()
+            self.key = self.generate_key("%s%s" % (email, group.name))
         self.group = group
         self.email = email
 
