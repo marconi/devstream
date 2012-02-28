@@ -14,3 +14,9 @@ A collaboration app for developers.
 
 Project stories can be found here:
 https://www.pivotaltracker.com/projects/458523
+
+# Screenshots
+
+![Create Group](http://github.marconijr.com/devstream/create_group.png)
+![Group Detail](http://github.marconijr.com/devstream/group_detail.png)
+![Invites](http://github.marconijr.com/devstream/invites.png)
